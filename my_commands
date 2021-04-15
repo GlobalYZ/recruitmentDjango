@@ -1,0 +1,12 @@
+创建工程
+django-admin startproject recruitment
+python startproject recruitment
+创建应用
+python manage.py startapp jobs
+创建账号
+python manage.py createsuperuser
+数据迁移
+python manage.py makemigrations
+python manage.py migrate
+启动
+python manage.py runserver 0.0.0.0:8000
