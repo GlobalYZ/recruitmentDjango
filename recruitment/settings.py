@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-# INSTALLED_APPS它是Django项目里安装的应用
+# INSTALLED_APPS它是Django项目里默认安装的应用
 # 默认有安装django.admin、auth、sessions、messages和静态资源文件的应用，我们创建完了应用之后，也要往APPS的配置里面的结尾加上我们应用
 INSTALLED_APPS = [
     'django.contrib.admin',
