@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 
@@ -32,6 +33,6 @@ class Job(models.Model):# 这个Model是继承了django的Model，会有自动�
     #因为是外键引用，当我们删除一个用户的时候，这个职位它里面的用户就无效了，所以涉及到删除时外键关联如何处理的逻辑，需要去指定on_delete的一个行为
     #on_delete有默认的（忽略），级联删除，把数据设置成null，我们这里把关联数据的值设成NULL，on_delete引用的是函数不用加(),创建人要允许为null，不然报错。
     creator = models.ForeignKey(User,verbose_name="创建人",on_delete=models.SET_NULL,null=True)
-    #
-    created_date = models.DateTimeField(verbose_name="创建日期")
-    modified_date = models.DateTimeField(verbose_name="修改时间")
+    # 创建日期里可以指定默认值，用default来设置一个固定的，文本/日期，default可以指向一个函数，这里面我们用datetime现在函数，需要引入包，
+    created_date = models.DateTimeField(verbose_name="创建日期",default=datetime.now)
+    modified_date = models.DateTimeField(verbose_name="修改时间",default=datetime.now)

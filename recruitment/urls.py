@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include,url
+
+from app01 import views
 
 urlpatterns = [
+    url(r"^",include("jobs.urls")),
     path('admin/', admin.site.urls),
+    path('timer/',views.timer),# 当用户请求是127.0.0.1:8000/timer的时候，首先匹配到这个app01视图函数 如同views.timer(request)
 ]

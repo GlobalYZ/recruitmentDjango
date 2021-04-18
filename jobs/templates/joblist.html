@@ -1,0 +1,17 @@
+{% extends 'base.html' %}   <!-- 第一行继承base.html -->
+
+<!-- 下面定的内容会吧base里content定的内容替换掉 -->
+{% block content %}
+    终于等到你，期待加入我们，用技术去探索一个新世界
+<!-- 判断job_list是否有内容，它是一个列表，从视图层传出来的是职位列表，用ul标签定义，每一行是一个职位 -->
+{% if job_list %}
+    <ul>
+    {% for job in job_list %}
+        <li>{{ job.type_name }}  <a href="/job/{{ job.id }}/" style="color: blue">{{ job.job_name }}</a> {{ job.city_name }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No jobs are available.</p>
+{% endif %}
+
+{% endblock %}
