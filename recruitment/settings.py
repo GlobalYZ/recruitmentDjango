@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 # settings.py是整个Django项目的配置文件
+import os.path
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -126,6 +127,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATIC_URL = '/static/'是默认的别名，下面是新加的，两个需要配合使用
+# 配好STATICFILES_DIRS形成的效果是找到static时进入的是下面定义的static文件夹下
+STATICFILES_DIRS = [
+    # BASE_DIR是路径，在上边有定义= Path(__file__).resolve().parent.parent，上一层的上一层的下面和static文件夹拼出来一个路径
+    os.path.join(BASE_DIR,"static")# 配置一个静态文件夹，告诉Django去哪里拿
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
