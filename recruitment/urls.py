@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('timer/',views.timer),# 当用户请求是127.0.0.1:8000/timer的时候，首先匹配到这个app01视图函数 如同views.timer(request)
     path('index/',views.index),
+    path('mysqlindex/',views.mysqlIndex),
     # 分发
     # re_path(r"app01/",include("app01.urls")),简写如下，以^开头直接去里面找对应的分发后面的app01是命名空间，组合成元组的形式
     re_path(r"^",include(("app01.urls","app01"))),# 后面的app01就是命名空间的名称，与视图函数里的反向解析相对应

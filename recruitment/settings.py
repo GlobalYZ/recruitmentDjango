@@ -83,12 +83,24 @@ WSGI_APPLICATION = 'recruitment.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 # 这里指定了我们使用什么样的数据库，默认使用了本地的sqlite的数据库，这里我们可以配置数据库的路径，也可以替换数据库的引擎
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'orm',# 要链接的数据库，连接前需要创建好
+        'USER': 'root',# 要连接数据库的用户名
+        'PASSWORD': '123456',# 要连接数据库的密码
+        'HOST': '127.0.0.1',# 连接的主机
+        'PORT': 3306,
     }
 }
+
 
 
 # Password validation
@@ -139,3 +151,22 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 下面语句的作用是，在处理表的时候，打印出对数据库的处理过程
+LOGGING= {
+    'version': 1,
+    'disalbe_existing_loggers':False,
+    'handlers':{
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
+    },
+    'loggers':{
+        'django.db.backends':{
+            'handlers':['console'],
+            'propagate':True,
+            'level':'DEBUG',
+        },
+    }
+}
