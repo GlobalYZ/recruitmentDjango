@@ -94,6 +94,7 @@ def mysqlIndex(request):
     # 方式二 creat返回值就是当前生成的这条对象记录
     # id因为已设置成自增，故可以不传，此方式会直接执行后边的创建，返回给book_obj，无需save，
     # book_obj = Book.objects.create(title="php",price=100,pub_date="2020-12-18",publish="洋哥出版社")
+    # book_obj = Book.objects.create(title="python", price=200, pub_date="2021-12-18", publish="洋哥出版社")
     # print(book_obj.title)
     # print(book_obj.price)
     # print(book_obj.pub_date)
