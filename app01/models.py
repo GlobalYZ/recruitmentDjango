@@ -49,7 +49,7 @@ class Author(models.Model):
     name = models.CharField(max_length=32)
     age = models.IntegerField()
     # 设定与AuthorDetail表的一对一关系，注意如果不加to_fields，默认关联那张表的主键id
-    authordetail = models.OneToOneField(to="AuthorDetail", to_fields="nid", on_delete=models.CASCADE)
+    authordetail = models.OneToOneField(to="AuthorDetail", on_delete=models.CASCADE)#  to_fields="nid",去掉了没报错。。。
 
 
 # 出版社表
@@ -70,10 +70,10 @@ class Books(models.Model):
     # 1.publish_id INT,
     # 2.FOREIGN KEY (publish_id) REFERENCES publish(id)
     # 这样它会在数据库中生成一个publish_id的字段
-    publish = models.ForeignKey(to="Publish", to_fields="nid", on_delete=models.CASCADE)
+    publish = models.ForeignKey(to="Publish", on_delete=models.CASCADE)#  to_fields="nid",去掉了没报错。。。
 
     # 多对多，下面命令会直接生成第三张表，表名字叫books_authors，这张表的名字加这个字段
-    authors = models.ManyToManyField(to="Author",to_fields="nid")
+    authors = models.ManyToManyField(to="Author")#  to_fields="nid",去掉了没报错。。。
 
 # 如果是多对多，需要创建第三张表，可以手写如下，但是Django通过语法可以一键生成，在上边
 # class Book2Author(models.Model):
