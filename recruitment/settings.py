@@ -153,20 +153,20 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 下面语句的作用是，在处理表的时候，打印出对数据库的处理过程
-LOGGING= {
-    'version': 1,
-    'disalbe_existing_loggers':False,
-    'handlers':{
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
-        },
-    },
-    'loggers':{
-        'django.db.backends':{
-            'handlers':['console'],
-            'propagate':True,
-            'level':'DEBUG',
-        },
-    }
-}
+# LOGGING= {
+#     'version': 1,
+#     'disalbe_existing_loggers':False,
+#     'handlers':{
+#         'console':{
+#             'level':'DEBUG',
+#             'class':'logging.StreamHandler',
+#         },
+#     },
+#     'loggers':{
+#         'django.db.backends':{
+#             'handlers':['console'],
+#             'propagate':True,
+#             'level':'DEBUG',
+#         },
+#     }
+# }

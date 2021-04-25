@@ -1,12 +1,14 @@
 创建工程
 django-admin startproject recruitment
-python startproject recruitment
+python3 startproject recruitment
 创建应用
-python manage.py startapp jobs
+python3 manage.py startapp jobs
 创建账号
-python manage.py createsuperuser
+python3 manage.py createsuperuser
 数据迁移
-python manage.py makemigrations
-python manage.py migrate
+python3 manage.py makemigrations
+python3 manage.py migrate
 启动
-python manage.py runserver 0.0.0.0:8000
+python3 manage.py runserver 0.0.0.0:8000
+查看数据库存放位置
+mysql>show global variables like "%datadir%";
