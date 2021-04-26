@@ -42,6 +42,8 @@ class AuthorDetail(models.Model):
     telephone = models.BigIntegerField()
     addr = models.CharField(max_length=64)
 
+    def __str__(self):
+        return self.telephone
 
 # 作者表
 class Author(models.Model):
@@ -51,6 +53,8 @@ class Author(models.Model):
     # 设定与AuthorDetail表的一对一关系，注意如果不加to_fields，默认关联那张表的主键id
     authordetail = models.OneToOneField(to="AuthorDetail", on_delete=models.CASCADE)#  to_fields="nid",去掉了没报错。。。
 
+    def __str__(self):
+        return self.name
 
 # 出版社表
 class Publish(models.Model):
@@ -59,6 +63,8 @@ class Publish(models.Model):
     city = models.CharField(max_length=32)
     email = models.EmailField()
 
+    def __str__(self):
+        return self.name
 
 #
 class Books(models.Model):
@@ -66,6 +72,10 @@ class Books(models.Model):
     title = models.CharField(max_length=32)
     publishDate = models.DateField()
     price = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return self.title
+
     # 下面这句一对多关联语句起到了mysql中两句话的作用：
     # 1.publish_id INT,
     # 2.FOREIGN KEY (publish_id) REFERENCES publish(id)

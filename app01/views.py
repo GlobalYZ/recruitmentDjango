@@ -194,7 +194,128 @@ def mysqlIndex(request):
     # update() 调用者：QuerySet对象
     # ret = Book.objects.filter(title="php").update(title="php_update")# 返回的是修改的个数
 
+    return HttpResponse("OK")
+
+# 需要先导入
+from app01.models import *
+def  add(request):
+    # pub = Publish.objects.create(name="人民出版社",email="123@139.com",city="北京")
+    # ----------------------------绑定一对多的关系---------------------------------------------------
+    # 方式一：建议用
+    # 为book表绑定出版社： ① publish ———— 多 books
+    # books_obj = Books.objects.create(title="红楼梦",price="100",publishDate="2012-12-12",publish_id=1)
+    # 方式二：也可以，相当于给翻译过来了
+    # pub_obj = Publish.objects.filter(nid=1).first()
+    # books_obj = Books.objects.create(title="西游记", price="100", publishDate="2012-12-12", publish=pub_obj)
+    # print(books_obj.publish)# Publish object (1)    与这本书籍关联的出版社对象，如果需要显示出来内容，在各种class里加上__str__
+    # print(books_obj.publish.name,books_obj.publish.email,books_obj.publish_id)# 都能点出来
+    # 比如，查询西游记的出版社对应的邮箱
+    # books_obj = Books.objects.filter(title="西游记").first()
+    # print(books_obj)# Books object (4)  如有__str__  那么：西游记
+    # print(books_obj.publish)  # Publish object (1)  如有__str__  那么：人民出版社
+    # print(books_obj.publish.email)# 123@139.com
+    # --------------------------------绑定多对多的关系----------------------------------------------
+    # books_obj = Books.objects.create(title="金瓶梅", price="100", publishDate="2012-12-12", publish_id=1)
+    # alex = Author.objects.get(name="alex")# 可以通过get找到Author的model对象，通过对象能拿到主键
+    # egon = Author.objects.get(name="egon")# get什么都可以，这里只是好理解用了name
+    # 因为多对多的第三张表是ORM生成给数据库的，并没有实际类，所以无法直接操纵，但Django给我们提供了一个接口
+    # books_obj.authors.add(alex,egon)# 绑定多对多关系的API，用类属性里的多对多字段，直接点add，这样写会自动去找alex和egon的主键
+    # books_obj.authors.add(1,2,4)# add(*[1,2,4]) 这两种是如果已知Author主键，也可以直接写定，后者是python的一种语法，等效位置参数
+
+    # 解除多对多关系API
+    books_obj = Books.objects.filter(nid=9).first()
+    # books_obj.authors.remove(2)# books_obj.authors.remove(*[1,2]) 写法一样
+    # books_obj.authors.clear()# 将nid=9的书籍在多联集表中全部清除
+
+    print(books_obj.authors.all())# QuerySet:与这本书关联的所有作者对象
 
 
+
+    return HttpResponse("ok")
+
+
+def query(request):
+    '''
+    跨表查询：
+        1 基于对象查询（子查询）
+        2 基于双下划线查询（Join查询）
+        3 聚合和分组查询
+        4 F 与 Q查询
+    :param request:
+    :return:
+    '''
+    # -----------------------------------基于对象的跨表查询（子查询）-----------------------------
+    '''
+    A-B两个表，无论是一对一，一对多，还是多对多，关联属性在A表中
+    正向查询：A------>B  按字段
+    反向查询：B------>A  按表名，表名小写_set.all()  是个QuerySet
+    # 一对多查询：
+                                通过 books_obj.publish 正向查询
+            Books（关联属性：publish）------------------> Publish
+                                通过 publish_obj.books_set.all() 反向查询
+    '''
+    # 一对多的正向查询：查询金瓶梅这本书的出版社的名字
+    books_obj = Books.objects.filter(title="金瓶梅").first()
+    print(books_obj.publish)# 与这本书关联的出版社对象
+    print(books_obj.publish.name)
+    # 一对多的反向查询：查询人民出版社出版过的书籍名称
+    publish_obj = Publish.objects.filter(name="人民出版社").first()
+    ret = publish_obj.books_set.all()
+    print(ret)
+
+
+    '''
+    正向查询：A------>B  按字段
+    反向查询：B------>A  按表名，表名小写_set.all()  是个QuerySet
+    # 多对多查询：
+                                通过 books_obj.authors.all() 正向查询
+            Books（关联属性：authors）------------------> Author
+                                通过 author_obj.books_set.all() 反向查询
+    '''
+    # 多对多查询的正向查询：查询金瓶梅这本书的作者的名称
+    books_obj = Books.objects.filter(title="金瓶梅").first()
+    author_list = books_obj.authors.all()# QuerySet对象  [author_obj,author_obj`````]
+    for author in author_list:
+        print(author.name)
+    # 多对多查询的反向查询：查询alex出版过的所有书籍名称
+    author_obj = Author.objects.filter(name="Alex").first()
+    books_list = author_obj.books_set.all()
+    for books in books_list:
+        print(books.title)
+
+
+    '''
+    正向查询：A------>B  按字段
+    反向查询：B------>A  按表名小写
+    # 一对多查询：
+                                    通过  author_obj.authordetail 正向查询
+            Author（关联属性：authordetail）------------------> AuthorDetail
+                                    通过  authordetail_obj.author 反向查询
+    '''
+    # 一对一查询的正向查询：查询alex的手机号
+    author_obj = Author.objects.filter(name="alex").first()
+    authordetail_obj = author_obj.authordetail
+    print(authordetail_obj.telephone)
+    # 一对一的反向查询：查询手机号为110的作者的名字和年龄
+    authordetail_obj = AuthorDetail.objects.filter(telephone="110").first()
+    author_obj = authordetail_obj.author
+    print(author_obj.name)
+
+
+    # ----------------------------------------基于双下划线的跨表查询（Join查询）----------------------
+    # 一对多查询的正反向查询：查询金瓶梅这本书的出版社的名字
+    # SELECT app01_publish.name FROM app01_book INNER JOIN app01_publish ON app01_book.publish_id = app01_publish.nid WHERE app01_book.title = "金瓶梅"
+    # values相当于就是Join，publish是字段，publish__name是orm的特殊语法，可以publish__Publish表的不同字段
+    ret = Books.objects.filter(title="金瓶梅").values("publish__name")
+    print(ret)# <QuerySet [{'publish__name': '人民出版社'}]>
+    ret = Publish.objects.filter(books__title="金瓶梅").values("name")
+    print(ret)
+    '''
+    基于双下划线的跨表查询（Join查询）
+        key:正向查询：按字段
+            反向查询：按表名小写
+    '''
 
     return HttpResponse("OK")
+
+
