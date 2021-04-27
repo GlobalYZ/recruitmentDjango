@@ -162,9 +162,9 @@ def mysqlIndex(request):
     ret = Book.objects.all().values("price")
     # < QuerySet[{'price': Decimal('100.00')}, {'price': Decimal('100.00')}, {'price': Decimal('200.00')}] >
     ret = Book.objects.all().values("price","title")
-    # < QuerySet[(Decimal('100.00'), 'python红宝书'), (Decimal('100.00'), 'php'), (Decimal('200.00'), 'go')] >
+    # <QuerySet [{'price': Decimal('100.00'), 'title': 'php'}, {'price': Decimal('200.00'), 'title': 'python'}, {'price': Decimal('100.00'), 'title': 'go'}]>
     print(ret)
-    print(ret[0].get("price"))
+    print(ret[0].get("price"),"-----------------------------")
 
     # 10、value_list()方法，返回的是一个含有元组的列表
     ret = Book.objects.all().values_list("price","title")
@@ -303,6 +303,11 @@ def query(request):
 
 
     # ----------------------------------------基于双下划线的跨表查询（Join查询）----------------------
+    '''
+    基于双下划线的跨表查询（Join查询）
+        key:正向查询：按字段 values("关联字段__查询字段")
+            反向查询：按表名小写__"字段名称" values("查询字段")
+    '''
     # 一对多查询的正反向查询：查询金瓶梅这本书的出版社的名字
     # SELECT app01_publish.name FROM app01_book INNER JOIN app01_publish ON app01_book.publish_id = app01_publish.nid WHERE app01_book.title = "金瓶梅"
     # values相当于就是Join，publish是字段，publish__name是orm的特殊语法，可以publish__Publish表的不同字段
@@ -310,12 +315,87 @@ def query(request):
     print(ret)# <QuerySet [{'publish__name': '人民出版社'}]>
     ret = Publish.objects.filter(books__title="金瓶梅").values("name")
     print(ret)
-    '''
-    基于双下划线的跨表查询（Join查询）
-        key:正向查询：按字段
-            反向查询：按表名小写
-    '''
+
+    # 多对多的正反向查询：查询金瓶梅这本书的所有作者的名字（Join）
+    # 通过Books表Join与其关联的Author表，属正向，按字段authors通知ORM引擎join books_author与author
+    ret = Books.objects.filter(title="金瓶梅").values("authors__name")
+    print(ret)# QuerySet[{},{}]
+    # 通过Author
+    ret = Author.objects.filter(books__title="金瓶梅").values("name")
+    print(ret)# QuerySet
+
+    # 一对一查询正反向查询：查询ales的手机号
+    ret = Author.objects.filter(name="alex").values("authordetail__telephone")
+    print(ret)# <QuerySet [{'authordetail__telephone': 110}]>
+    ret = AuthorDetail.objects.filter(author__name="alex").values("telephone")
+    print(ret)# <QuerySet [{'telephone': 110}]>
+
+    # --------------------------进阶练习：---------------------------------------------
+    # 手机号以110开头的作者出版过的所有书籍名称以及书籍出版社名称
+    # 需求：通过Books表Join AuthorDetail表，Books与AuthorDetail无关联，所以必须连续跨表  PS：下面不加startswith貌似也行
+    ret = Books.objects.filter(authors__authordetail__telephone__startswith="110").values("title","publish__name")
+    print(ret)# <QuerySet [{'title': '金瓶梅', 'publish__name': '人民出版社'}, {'title': '金瓶梅', 'publish__name': '人民出版社'}]>
+    ret = Author.objects.filter(authordetail__telephone__startswith="110").values("books__title","books__publish__name")
+    print(ret)
+
+    # 要对方的值时就__
+    # 我自我总结一下，filter(里就是过滤的条件).values(里是想要的值的字段)，字段不在表里的就用关联字段或者小写表名__一下
+
+    # ------------------------聚合与分组查询---------------------------------------------
+
+    # -------------------------聚合:aggregate：返回值是一个字典，不再是QuerySet
+    from django.db.models import Avg,Max,Min,Count
+    # 查询所有书籍的平均价格
+    ret = Books.objects.all().aggregate(avg_price=Avg("price"),max_price=Max("price"))# Avg前面可以自定义字典的名字avg_pric
+    print(ret)# {'price__avg': Decimal('309.666667')}  //  改名后 {'avg_price': Decimal('309.666667')}
+
+    # -------------------------分组：annotate，返回值依然是QuerySet
+
+    # 单表分组查询
+    # 示例1：查询每一个部门的名称以及员工的平均薪水
+    ret = Emp.objects.values("dep").annotate(avg_salary=Avg("salary"))
+    print(ret)# <QuerySet [{'dep': '教学部', 'avg_salary': Decimal('51000.000000')}, {'dep': '保安部', 'avg_salary': Decimal('5000.000000')}]>
+    # 单表分组查询的ORM语法：单表模型.objects.values("group by的字段").annotate(聚合函数("统计字段"))
+
+    # 示例2：查询每一个省份的名称以及员工数
+    ret = Emp.objects.values("province").annotate(c_t=Count("id"))
+    print(ret)# <QuerySet [{'province': '山东省', 'c_t': 2}, {'province': '河北省', 'c_t': 1}]>
+
+    # 补充知识点
+    # ret = Emp.objects.all()
+    # print(ret)# select * from emp
+    # ret = Emp.objects.values("name")
+    # print(ret)# select name from emp
+
+
+    # 多表分组查询
+    # 示例3：查询每一个出版社的名称以及出版的书籍个数
+    ret = Publish.objects.values("name").annotate(c_t=Count("books__title"))
+    print(ret)# <QuerySet [{'name': '人民出版社', 'c_t': 9}, {'name': '天津出版社', 'c_t': 0}, {'name': '北京出版社', 'c_t': 0}, {'name': '南京出版社', 'c_t': 0}]>
+
+    # 示例4：查询每一个作者的名字以及出版过的书籍的最高价格
+    ret = Author.objects.values("name").annotate(max_price=Max("books__price"))
+    print(ret)# <QuerySet [{'name': 'alex', 'max_price': Decimal('150.00')}, {'name': 'egon', 'max_price': Decimal('150.00')}]>
+    # 跨表的分组查询模型：每一个后表模型.objects.values("name/id").annotate(聚合函数(关联表__统计字段))
+
+    # 示例5：查询每一个书籍的名称以及对应的作者个数
+    ret = Books.objects.values("title").annotate(c_t=Count("authors__name"))
+    print(ret)# <QuerySet [{'title': '红楼梦', 'c_t': 0}, {'title': '三国演义', 'c_t': 0}, {'title': '西游记', 'c_t': 0}, {'title': '金瓶梅', 'c_t': 3}]>
+
+
+    # ---------------------------------F查询与Q查询--------------------------------------------
+    from django.db.models import F,Q
+    # 查询评论数大于阅读数的字段
+    ret = Books.objects.filter(comment_num__gt=F("read_num"))
+    print(ret)# <QuerySet [<Books: 红楼梦>, <Books: 三国演义>, <Books: 西游记>, <Books: 西游记>]>
+
+    # 把所有的书籍价格都提高1块钱
+    # ret = Books.objects.all().update(price=F("price")+1)
+    # print(ret)# 9
+
+    # 把书名红楼梦并且价格是100的书籍查出来，下面这种写法是普通写法，"，"代表且的关系，但如果是"或"的话，就要用到Q了
+    # ret = Books.objects.filter(title="红楼梦",price=100)
+    ret = Books.objects.filter(Q(title="红楼梦")|Q(price=101))# 语法上有"|"，"&"和~Q，代表"非"，如果同时使用键值对，加在Q后边
+    print(ret)
 
     return HttpResponse("OK")
-
-

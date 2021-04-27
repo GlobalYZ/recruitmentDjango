@@ -72,6 +72,8 @@ class Books(models.Model):
     title = models.CharField(max_length=32)
     publishDate = models.DateField()
     price = models.DecimalField(max_digits=5, decimal_places=2)
+    read_num = models.IntegerField(default=0)
+    comment_num = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -90,3 +92,16 @@ class Books(models.Model):
 #     nid = models.AutoField(primary_key=True)
 #     book = models.ForeignKey(to="Books")
 #     author = models.ForeignKey(to="Author")# 不写to_fields默认关联其主键
+
+
+
+# 员工表
+class Emp(models.Model):
+    name = models.CharField(max_length=32)
+    age = models.IntegerField()
+    salary = models.DecimalField(max_digits=8,decimal_places=2)
+    dep = models.CharField(max_length=32)
+    province = models.CharField(max_length=32)
+
+    def __str__(self):
+        return self.name,self.salary
