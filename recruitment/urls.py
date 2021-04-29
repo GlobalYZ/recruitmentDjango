@@ -35,7 +35,7 @@ urlpatterns = [
     # re_path(r"app01/",include("app01.urls")),简写如下，以^开头直接去里面找对应的分发后面的app01是命名空间，组合成元组的形式
     re_path(r"^",include(("app01.urls","app01"))),# 后面的app01就是命名空间的名称，与视图函数里的反向解析相对应
     # path特征，可以创建一个有名分组，直接定义好数据类型
-    path("articles/<int:year>",views.path_year),# 相当于path_year(request,2001)
+    # path("articles/<int:year>",views.path_year),# 相当于path_year(request,2001)
     # 验证自定义的url转换器
     path("articles/<mm:month>",views.path_month),
 ]

@@ -10,6 +10,36 @@ main.py:启动文件，封装了socket
 3 templates文件夹:存放html文件 ---- 模板
 4 models:在项目启动前，在数据库中创建表结构的 ---- 与数据库相关
 
+AutoField 自增
+BigAutoField 比较大的自增 64-bit integer
+BigIntegerField 更大的整数 -9223372036854775808 to 9223372036854775807
+BinaryField 只能存二进制
+BooleanField 布尔值
+CharField   字符串
+DateField   存到天 2019-04-27
+DateTimeField   存到秒 2019-04-27 17：53：21
+DecimalField    存储小数位数的号码
+DurationField   区间 有多少[DD] [HH:[MM:]]SS[.uuuuuu]
+EmailField  Email，底层还是个字符串，能起到检测作用，数据库里没有这个
+FileField   存储文件
+FloatField 存储浮点
+ImageField  存储图片，Django加了一层验证，本质上也是二进制
+IntegerField    普通的整数
+GenericIPAddressField   IP地址，支持IPV4和IPV6
+NullBooleanField    允许为空的字段，和BooleanField相似，但能有NULL值
+PositiveIntegerField    正整数 0 ~ 2147483647
+PositiveSmallIntegerField   正的小数 0 ~ 32767
+SlugField   也是个字符串，不怎么通用，新闻标签
+SmallIntegerField   小整数
+TextField   大的文本
+URLField    是个URL
+UUIDField   使用的 Python 的 UUID 库
+
+ForeignKey 外键关联
+ManyToManyField 多对多
+OneToOneField 一对一
+
+Django里一般需不要写ID，它会给默认加上，并且是自增的，设成了主键，自己写的话就用自己写的
 '''
 
 
@@ -105,3 +135,60 @@ class Emp(models.Model):
 
     def __str__(self):
         return self.name,self.salary
+
+from django.utils.html import format_html
+
+class Account(models.Model):
+    """账户表"""
+    username = models.CharField(max_length=64,unique=True)# unique 唯一的
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
+    register_date = models.DateTimeField(auto_now_add=True)# 自动生成日期
+    signature = models.CharField("签名",max_length=255,null=True)# 可以加个中文解释 等同于+上一个 verbose_name = "签名"
+    def __str__(self):
+        return self.username
+
+class Article(models.Model):
+    """文章表"""
+    title = models.CharField(max_length=255,unique=True)
+    content = models.TextField()
+    pub_date = models.DateTimeField()
+    tags = models.ManyToManyField("Tag",blank=True)# null=True可以不加，并且它对Mysql有效，但在Admin后台还是必填项，加blank就不必填了
+    read_count = models.IntegerField(null=True)
+
+    account = models.ForeignKey("Account",on_delete=models.CASCADE)
+    # on_delete 参数：
+    # CASCADE 关联删除； PROTECT 不让你删，除非你把关联的财产都删完了才可以删。
+    # SET_NULL 置空，这里就是不知道谁是作者了
+    # SET_DEFAULT 可以设置被删了，默认给谁
+
+    class Meta:
+        # verbose_name = "文章"# 用这个会有复数+s的形式
+        verbose_name_plural = "文章"
+
+    def get_comment(self):# 返回评论
+        return 10
+    def get_tags(self):# 返回这个文章关联的标签
+        return ','.join([i.name for i in self.tags.all()])
+
+    def __str__(self):
+        return self.title
+
+class Tag(models.Model):
+    """标签表"""
+    name = models.CharField(max_length=64,unique=True)
+    date = models.DateTimeField(auto_now_add=True)
+    color_code = models.CharField(max_length=6)# 颜色字段
+
+    def colored_name(self):
+        return format_html(
+            '<span style="color: #{};">{}</span>',
+            self.color_code,
+            self.name,
+        )
+
+    def __str__(self):
+        return self.name
+
+
+

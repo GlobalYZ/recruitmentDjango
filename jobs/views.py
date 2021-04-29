@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 # Create your views here.
 from django.shortcuts import render
 from django.http import  HttpResponse
@@ -19,6 +17,8 @@ def joblist(request):
     for job in job_list:
         job.city_name = Cities[job.job_city][1]
         job.job_type = JobTypes[job.job_type][1]
+        job.fuckName = "aaa"# 可以直接赋予一个属性，在前端调用显示
 
+    # print(job_list.first().job_city) # 1 ，所以Cities[1][1]得出"上海"
     # 用模板的render方法把上下文展现给用户
     return HttpResponse(template.render(context))

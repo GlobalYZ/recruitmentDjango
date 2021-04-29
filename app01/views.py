@@ -1,5 +1,7 @@
 # HttpResponse()是响应对象，（响应首行，消息头，响应体），Django已经帮做好首行和消息头，这里只需加入字符串的响应体
 #
+import datetime
+
 from django.shortcuts import render,HttpResponse
 
 # Create your views here.
@@ -99,13 +101,17 @@ def mysqlIndex(request):
     # print(book_obj.price)
     # print(book_obj.pub_date)
 
+    # 补充，如果是多对多的对象，创建时不需要对ManyToMany的字段赋值，等创建完了，再用对象.多对多的字段.set([?,?])
+    # 例如：o = Article(title=...) --- o.tags.set([1,2]) --- 如果再次 o.tags.set([1,]) 那么将是重新赋值的意思，2就对应着没了
+    #   如果是原有记录上加新，要用 o.add(3,4)        解释：这里的1234对应的都是Tag类里的id
+
     # ==================================查询表记录API========================================
     '''
     1 方法的返回值
     2 方法的调用者
 
     '''
-    # 1、all()方法，返回值是一个queryset对象
+    # 1、all()方法，返回值是一个queryset对象，queryset是支持切片的，但只支持正切片
     book_list = Book.objects.all()
     # 打印出来的是Django里特有的QuerySet类型对象，类似于列表中的存放了一个一个对象[obj1,obj2,obj3···]
     print(book_list)# 在models里的Book类里要写好__srt__方法，打印出实际想要的效果
@@ -138,6 +144,7 @@ def mysqlIndex(request):
     ret = Book.objects.all().order_by("-id")# 默认按ASC有小到大排序，加上-号，则成为DESC由大到小排序
     ret = Book.objects.all().order_by("price","id")# 优先以price排，如相等，按id排
     print(ret)
+    # 补充，如果想.reverse()反转排序，必须先要经过order_by()排序才可以使用
 
     # 7、count() 调用者：QuerySet，返回值：int
     ret = Book.objects.all().count()
@@ -148,7 +155,7 @@ def mysqlIndex(request):
     if ret:
         print("OK")
 
-    # 9、values()方法，可以直接循环取每一个对象的特有字段，返回的是一个含有字典的列表，调用者：QuerySet，返回值：QuerySet
+    # 9、values()方法，可以直接循环取每一个对象的特有字段，返回的是一个含有字典的QuerySet列表，调用者：QuerySet，返回值：QuerySet
     '''
     相当于是这样的操作原理
     temp = []
@@ -177,11 +184,13 @@ def mysqlIndex(request):
 
     # ==================================查询表记录之模糊查询========================================
 
+                                                         # 大于等于是__gte
     ret = Book.objects.filter(price__gt=10,price__lt=200)# price__gt：> 的意思，price__lt: < 的意思，找到 >10的<200的price
-    ret = Book.objects.filter(title__startswith="py")# title 中开头是"py"的
-    ret = Book.objects.filter(title__contains="h")# title 中含有"h"的
-    ret = Book.objects.filter(title__icontains="h")# title 中含有"h"的，不区分大小写
+    ret = Book.objects.filter(title__startswith="py")# title 中开头是"py"的，大小写敏感，istartswith 大小写不敏感
+    ret = Book.objects.filter(title__contains="h")# title 中含有"h"的   大小写敏感，title__icontains 大小写不敏感
+    ret = Book.objects.filter(title__endswith="h")  # title 中结尾"h"的，不区分大小写 iendswith大小姐不敏感
     ret = Book.objects.filter(price__in=[100,200,300])# price里有列表中这几个价格的可以过滤出来
+    # ret = Account.objects.filter(register_date__range=['2018-01-30',datetime.date(2018,5,20)]) range：区间查询
     ret = Book.objects.filter(pub_date__year=2018,pub_date__month=6)# pub_data 里2018年的字段，只有DateFiled的才能这样用
     print(ret)
 
@@ -261,6 +270,9 @@ def query(request):
     # 一对多的反向查询：查询人民出版社出版过的书籍名称
     publish_obj = Publish.objects.filter(name="人民出版社").first()
     ret = publish_obj.books_set.all()
+    # 等同于下面
+    publish_obj = Publish.objects.get(name="人民出版社")
+    ret = publish_obj.books_set.select_related()# all和select_related效果是一样的
     print(ret)
 
 
