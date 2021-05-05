@@ -85,3 +85,19 @@ t = (10, 20, 30)
 d = {'a': 100, 'b': 200, 'c': 300}
 # 通过 **来对一个字典进行解包操作
 fn4(**d)
+
+def test(a,b,c):
+    print("测试··········")
+    # for obj in d.keys():
+    #     print(obj,"   ",d[obj])
+    print(a,b,c)
+test(**d)
+
+def test2(**kwargs):
+    print("测试2··········")
+    print(type(kwargs))
+    print(kwargs)
+    for obj in kwargs.keys():
+        print(obj,"   ",kwargs[obj])
+
+test2(**d)
