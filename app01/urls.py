@@ -2,6 +2,7 @@ from django.urls import path,re_path
 from app01 import views
 
 urlpatterns = [
+    re_path(r"^index", views.index),
     re_path(r"^articles/2003/$",views.special_case_2003,name="s_c_2003"),
     # 若要从URL中捕获一个值，只需要在它周围放置一对圆括号()
     # 不需要添加一个前导的反斜杠，因为每个URL都有，例如：应该是^articles，而不是^/articles

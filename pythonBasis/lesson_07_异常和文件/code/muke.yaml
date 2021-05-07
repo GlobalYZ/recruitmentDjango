@@ -1,0 +1,13 @@
+url:
+  https://www.imooc.com/
+types:
+  - 前沿
+  - 前端
+  - 后端
+  - 移动端
+  - 云计算
+  - 运维
+  - ui
+python:
+  web: django
+  spader: bs5

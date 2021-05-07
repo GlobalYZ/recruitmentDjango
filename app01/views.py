@@ -1,13 +1,13 @@
 # HttpResponse()是响应对象，（响应首行，消息头，响应体），Django已经帮做好首行和消息头，这里只需加入字符串的响应体
-#
 import datetime
 
 from django.shortcuts import render,HttpResponse
 
+
 # Create your views here.
 # 视图函数这里必须要传request，它是通过urls文件里的path传过来的
 from django.urls import reverse
-
+from django.views import View
 
 def timer(request):
     import time
@@ -15,6 +15,12 @@ def timer(request):
     print(request.GET,request.POST)# QueryDict的字典对象，可以根据request.GET.get("name")取值
     print(request.path)# url:协议：//IP：port/路径？请求数据，，，打印的是端口号之后，？之前的路径
     print(request.get_full_path)# 区别于上边，全打印出来
+    print(request.build_absolute_uri())# 绝对路径,括号里可以输入字符串，它能自动拼接上
+    print(request.scheme)# 请求是http还是https
+    print(request.content_type)# text/plain意思是文本，有各种类型的回复
+    print(request.FILES)
+    print(request.META)# 里面有很多的数据，以字典的形式存储
+
 
     ctime = time.time()
     # render()方法给封装好了，填入timer。html会自动去templates文件夹下去找
@@ -28,7 +34,10 @@ def special_case_2003(request):
     # 如果解析地址中含正则表达式，则需要传入一个符合该正则表达式的任意值代理匹配才可以
     url = reverse("app01:y_a",args=(7788,))# r"^articles/([0-9]{4})/$"
     print("url:    -------      ",url)
-
+    html = "一些返回的网页内容"
+    res = HttpResponse(html,content_type="text/plain",status=404)# 也可以在这里修改返回的类型，状态码等
+    res.reason_phrase = "状态码加上这个标签"
+    # return res
     return HttpResponse("special_case_2003")
 
 def year_archive(request,year):
@@ -411,3 +420,18 @@ def query(request):
     print(ret)
 
     return HttpResponse("OK")
+
+    #   ---------------------------------类视图Class Based Views---------------------------
+class classView(View):
+    time = datetime.datetime.now()
+    def get(self,request):
+        return HttpResponse("Class view get request %s" %self.time)
+    def post(self,request):
+        return HttpResponse("Class view post")
+class classView2(classView):# 继承
+    time = 10# 覆盖了上面的time 值
+
+
+    # 中间件
+def testMiddleware(request):
+    return HttpResponse("testMiddleware OK")

@@ -75,16 +75,18 @@ class AuthorDetail(models.Model):
     def __str__(self):
         return self.telephone
 
+
 # 作者表
 class Author(models.Model):
     nid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=32)
     age = models.IntegerField()
     # 设定与AuthorDetail表的一对一关系，注意如果不加to_fields，默认关联那张表的主键id
-    authordetail = models.OneToOneField(to="AuthorDetail", on_delete=models.CASCADE)#  to_fields="nid",去掉了没报错。。。
+    authordetail = models.OneToOneField(to="AuthorDetail", on_delete=models.CASCADE)  # to_fields="nid",去掉了没报错。。。
 
     def __str__(self):
         return self.name
+
 
 # 出版社表
 class Publish(models.Model):
@@ -95,6 +97,7 @@ class Publish(models.Model):
 
     def __str__(self):
         return self.name
+
 
 #
 class Books(models.Model):
@@ -112,10 +115,11 @@ class Books(models.Model):
     # 1.publish_id INT,
     # 2.FOREIGN KEY (publish_id) REFERENCES publish(id)
     # 这样它会在数据库中生成一个publish_id的字段
-    publish = models.ForeignKey(to="Publish", on_delete=models.CASCADE)#  to_fields="nid",去掉了没报错。。。
+    publish = models.ForeignKey(to="Publish", on_delete=models.CASCADE)  # to_fields="nid",去掉了没报错。。。
 
     # 多对多，下面命令会直接生成第三张表，表名字叫books_authors，这张表的名字加这个字段
-    authors = models.ManyToManyField(to="Author")#  to_fields="nid",去掉了没报错。。。
+    authors = models.ManyToManyField(to="Author")  # to_fields="nid",去掉了没报错。。。
+
 
 # 如果是多对多，需要创建第三张表，可以手写如下，但是Django通过语法可以一键生成，在上边
 # class Book2Author(models.Model):
@@ -124,39 +128,43 @@ class Books(models.Model):
 #     author = models.ForeignKey(to="Author")# 不写to_fields默认关联其主键
 
 
-
 # 员工表
 class Emp(models.Model):
     name = models.CharField(max_length=32)
     age = models.IntegerField()
-    salary = models.DecimalField(max_digits=8,decimal_places=2)
+    salary = models.DecimalField(max_digits=8, decimal_places=2)
     dep = models.CharField(max_length=32)
     province = models.CharField(max_length=32)
 
     def __str__(self):
-        return self.name,self.salary
+        return self.name, self.salary
+
 
 from django.utils.html import format_html
 
+
 class Account(models.Model):
     """账户表"""
-    username = models.CharField(max_length=64,unique=True)# unique 唯一的
+    username = models.CharField(max_length=64, unique=True)  # unique 唯一的
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
-    register_date = models.DateTimeField(auto_now_add=True)# 自动生成日期
-    signature = models.CharField("签名",max_length=255,null=True)# 可以加个中文解释 等同于+上一个 verbose_name = "签名"
+    register_date = models.DateTimeField(auto_now_add=True)  # 自动生成日期
+    signature = models.CharField("签名", max_length=255, null=True)  # 可以加个中文解释 等同于+上一个 verbose_name = "签名"
+
     def __str__(self):
         return self.username
 
+
 class Article(models.Model):
     """文章表"""
-    title = models.CharField(max_length=255,unique=True)
+    title = models.CharField(max_length=255, unique=True)
     content = models.TextField()
     pub_date = models.DateTimeField()
-    tags = models.ManyToManyField("Tag",blank=True)# null=True可以不加，并且它对Mysql有效，但在Admin后台还是必填项，加blank就不必填了
+    tags = models.ManyToManyField("Tag", blank=True)  # null=True可以不加，并且它对Mysql有效，但在Admin后台还是必填项，加blank就不必填了
     read_count = models.IntegerField(null=True)
 
-    account = models.ForeignKey("Account",on_delete=models.CASCADE)
+    account = models.ForeignKey("Account", on_delete=models.CASCADE)
+
     # on_delete 参数：
     # CASCADE 关联删除； PROTECT 不让你删，除非你把关联的财产都删完了才可以删。
     # SET_NULL 置空，这里就是不知道谁是作者了
@@ -166,19 +174,21 @@ class Article(models.Model):
         # verbose_name = "文章"# 用这个会有复数+s的形式
         verbose_name_plural = "文章"
 
-    def get_comment(self):# 返回评论
+    def get_comment(self):  # 返回评论
         return 10
-    def get_tags(self):# 返回这个文章关联的标签
+
+    def get_tags(self):  # 返回这个文章关联的标签
         return ','.join([i.name for i in self.tags.all()])
 
     def __str__(self):
         return self.title
 
+
 class Tag(models.Model):
     """标签表"""
-    name = models.CharField(max_length=64,unique=True)
+    name = models.CharField(max_length=64, unique=True)
     date = models.DateTimeField(auto_now_add=True)
-    color_code = models.CharField(max_length=6)# 颜色字段
+    color_code = models.CharField(max_length=6)  # 颜色字段
 
     def colored_name(self):
         return format_html(
@@ -189,6 +199,3 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
-
-
-

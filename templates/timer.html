@@ -14,10 +14,11 @@
 <body>
 
 <h4>当前时间：{{ date }}</h4>
-<form action="" method="post">
+<form action="" method="post"  enctype="multipart/form-data"><!--enctype是告诉后台，这个表单里有文件，这样view可用request.FIELS取得文件到内存里-->
     {% csrf_token %}<!--  加上这句，就不会出现没有数据提交后的网页错误了，不加的话需要将配置文件中的中间件注释掉  -->
     用户名<input type="text" name="user">
     密码<input type="password" name="pwd">
+    <input type="file" name="f_test">
     <input type="submit">
 </form>
 

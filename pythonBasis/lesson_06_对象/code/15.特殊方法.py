@@ -53,11 +53,39 @@ class Person(object):
     # self > other
     def __gt__(self , other):
         return self.age > other.age
+    def __getattr__(self, item):# 如果属性不存在，就会走这个
+        print('这个item:{} 并不存在'.format(item))
+    def __setattr__(self, key, value):
+        # if key not in self.__dict__: 这段有点多余了，可以去掉
+        self.__dict__[key] = value
+        print(self.__dict__)
+    def __call__(self, *args, **kwargs):
+        print('call fucn will start')
 
 
 # 创建两个Person类的实例        
 p1 = Person('孙悟空',18)
-p2 = Person('猪八戒',28)
+# p2 = Person('猪八戒',28)
+print(p1.a)# 进入了__getattr__,这个item:a 并不存在 还会打印出一个 None
+p1.fuck = '法克'# 有了__setattr__后，就进入__setattr__，并且可创建新的， {'name': '孙悟空', 'age': 18, 'fuck': '法克'}
+p1('传入到__call__中')# call fucn will start
+
+'''链式创建，通过这些内置函数创建出属性和函数'''
+class Test(object):
+    def __init__(self,attr=""):
+        self.__attr = attr
+    def __call__(self, name):
+        return name
+    def __getattr__(self, key):
+        if self.__attr:
+            key = '{}.{}'.format(self.__attr,key)
+        else:
+            key = key
+        print(key)
+        return Test(key)# 运用了下递归，循环创建
+
+t = Test()
+print(t.a.b.c('新函数'))# 新函数
 
 # 打印p1
 # 当我们打印一个对象时，实际上打印的是对象的中特殊方法 __str__()的返回值
