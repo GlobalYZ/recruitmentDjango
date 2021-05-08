@@ -16,7 +16,7 @@ file_name = 'hello\\demo.txt'
 file_name = r'hello\demo.txt'
 
 # 表示路径，可以使用..来返回一级目录
-file_name = '../hello/demo.txt'
+file_name = 'hello/demo.txt'
 
 # 如果目标文件距离当前文件比较远，此时可以使用绝对路径
 # 绝对路径应该从磁盘的根目录开始书写

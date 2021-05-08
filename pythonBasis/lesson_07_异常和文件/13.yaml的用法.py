@@ -15,7 +15,8 @@ def read(path):
 
 if __name__ == '__main__':
     result = read('muke.yaml')
-    print(result,type(result))
     # {'url': 'https://www.imooc.com/', 'types': ['前沿', '前端', '后端', '移动端', '云计算', '运维', 'ui'], 'python': {'web': 'django', 'spader': 'bs5'}} <class 'dict'>
+    print(result,type(result))
+
     print(dir(yaml))# 查询yaml的方法
 

@@ -33,4 +33,4 @@ if __name__ == '__main__':
     print(result,type(result))# {'name': '小木', 'age': 18, 'top': 176} <class 'dict'>
     '''拿到的result可以继续操作'''
     result['sex'] = 'boy'
-    write('test.json',result)# {"name": "\u5c0f\u6728", "age": 18, "top": 176, "sex": "boy"}
+    write('test.json', result)# {"name": "\u5c0f\u6728", "age": 18, "top": 176, "sex": "boy"}

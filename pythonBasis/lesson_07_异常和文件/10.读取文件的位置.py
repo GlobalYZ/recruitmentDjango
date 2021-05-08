@@ -20,7 +20,7 @@
 #     # tell() 方法用来查看当前读取的位置
 #     print('当前读取到了 -->',file_obj.tell())
 
-with open('demo2.txt','rt' , encoding='utf-8') as file_obj:
+with open('demo2.txt', 'rt' , encoding='utf-8') as file_obj:
     # print(file_obj.read(100))
     # print(file_obj.read(30))
 
