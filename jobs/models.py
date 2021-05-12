@@ -36,3 +36,5 @@ class Job(models.Model):# 这个Model是继承了django的Model，会有自动�
     # 创建日期里可以指定默认值，用default来设置一个固定的，文本/日期，default可以指向一个函数，这里面我们用datetime现在函数，需要引入包，
     created_date = models.DateTimeField(verbose_name="创建日期",default=datetime.now)
     modified_date = models.DateTimeField(verbose_name="修改时间",default=datetime.now)
+
+

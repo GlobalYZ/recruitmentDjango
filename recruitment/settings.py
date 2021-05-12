@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app01',
     'jobs',
+    'interview',
 ]
 # MIDDLEWARE是启动的中间件，包括安全的中间件，防跨站攻击的中间件，跟认证授权的中间件
 MIDDLEWARE = [

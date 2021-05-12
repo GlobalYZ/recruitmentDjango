@@ -29,11 +29,11 @@ def timer(request):
 
 def special_case_2003(request):
     # 反向解析，给一个别名，通过reverse可解析出地址，在任意函数中都可以调用,加上命名空间更精准
-    url = reverse("app01:s_c_2003")
-    print("url命名空间:    -------      ",url)
+    url = reverse("app01:s_c_2003")#
+    print("url命名空间:    -------      ",url)# url命名空间:    -------       /app01/articles/2003/
     # 如果解析地址中含正则表达式，则需要传入一个符合该正则表达式的任意值代理匹配才可以
     url = reverse("app01:y_a",args=(7788,))# r"^articles/([0-9]{4})/$"
-    print("url:    -------      ",url)
+    print("url:    -------      ",url)# url:    -------       /app01/articles/7788/
     html = "一些返回的网页内容"
     res = HttpResponse(html,content_type="text/plain",status=404)# 也可以在这里修改返回的类型，状态码等
     res.reason_phrase = "状态码加上这个标签"
