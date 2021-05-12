@@ -24,13 +24,18 @@ for i in iter_obj:
 
 def make_iter():
     for i in range(10):
-        yield i
+        yield i# yield相当于是个return ,下次再进来从这次的值之后开始,只要有yield的函数就是generator类型了，带send()函数，send()里带next()
 iter_obj = make_iter()
-print(type(iter_obj))# <class 'generator'> 是迭代器类型的
+print(type(iter_obj))# <class 'generator'> 是生成器类型
 
 
-iter_obj = (i for i in range(10))
+iter_obj = (i for i in range(10))# 这样也是生成一个迭代器类型
+print(type(iter_obj))# <class 'generator'>
+print(list(iter_obj))#  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 for i in iter_obj:
-    print(i)
-for i in iter_obj:# 注意：上边已经读过了之后，内存放空了，这个就读不了了
-    print(i)
+    print('i = ',i)# 注意：如果上边已经读过了之后，内存放空了，这个就读不了了
+
+iter_obj = [i*i for i in range(10)]
+print(type(iter_obj))# <class 'list'> 不同于上面的()，他是列表类型
+print(iter_obj)
+print(iter_obj)
