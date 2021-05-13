@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # 第一轮面试结果
@@ -50,8 +51,13 @@ class Candidate(models.Model):
     first_result = models.CharField(max_length=256, choices=FIRST_INTERVIEW_RESULT_TYPE, blank=True,
                                     verbose_name=u'初试结果')
     first_recommend_position = models.CharField(max_length=256, blank=True, verbose_name=u'推荐部门')
-    # first_interviewer_user = models.ForeignKey(User, related_name='first_interviewer_user', blank=True, null=True, on_delete=models.CASCADE, verbose_name=u'面试官')
-    first_interviewer = models.CharField(max_length=256,blank=True,verbose_name=u'推荐部门')
+    # first_interviewer = models.CharField(max_length=256, blank=True, verbose_name=u'推荐部门')
+    '''由HR来选择面试官，因为原先有一个字段first_interviewer一面的面试官，可以直接改它的字段，把它引用自Django的用户，
+    这样会涉及到一个数据迁移，更改数据结构的时候会遇到一些问题，所以建议是保留或者删掉现有字段，添加一个新的字段做外键的引用，
+    User是系统的User，因为这个User对象有多个外键关联（一二HR面官），所以ralated_name用来指定哪个用户
+    '''
+    first_interviewer_user = models.ForeignKey(User, related_name='first_interviewer_user', blank=True, null=True, on_delete=models.CASCADE, verbose_name=u'面试官')
+
     first_remark = models.CharField(max_length=135, blank=True, verbose_name=u'初试备注')
 
     # 第二轮面试记录
@@ -71,12 +77,13 @@ class Candidate(models.Model):
     second_disadvantage = models.TextField(max_length=1024, blank=True, verbose_name=u'顾虑和不足')
     second_result = models.CharField(max_length=256, choices=INTERVIEW_RESULT_TYPE, blank=True, verbose_name=u'专业复试结果')
     second_recommend_position = models.CharField(max_length=256, blank=True, verbose_name=u'建议方向或推荐部门')
-    # second_interviewer_user = models.ForeignKey(User, related_name='second_interviewer_user', blank=True, null=True, on_delete=models.CASCADE, verbose_name=u'二面面试官')
-    second_interviewer = models.CharField(max_length=256,blank=True,verbose_name=u'面试官')
+    second_interviewer_user = models.ForeignKey(User, related_name='second_interviewer_user', blank=True, null=True, on_delete=models.CASCADE, verbose_name=u'二面面试官')
+    # second_interviewer = models.CharField(max_length=256,blank=True,verbose_name=u'面试官')
     second_remark = models.CharField(max_length=135, blank=True, verbose_name=u'专业复试备注')
 
     # HR终面
-    hr_score = models.CharField(max_length=10, choices=HR_SCORE_TYPE, blank=True, verbose_name=u'HR复试综合等级')
+    hr_score = models.CharField(max_length=10, choices=HR_SCORE_TYPE, blank=True, verbose_name=u'HR复试综合等级',
+                                help_text=u'1-5分，极优秀: >=4.5，优秀: 4-4.4，良好: 3.5-3.9，一般: 3-3.4，较差: <3分')
     hr_responsibility = models.CharField(max_length=10, choices=HR_SCORE_TYPE, blank=True, verbose_name=u'HR责任心')
     hr_communication_ability = models.CharField(max_length=10, choices=HR_SCORE_TYPE, blank=True,
                                                 verbose_name=u'HR坦诚沟通')
@@ -86,8 +93,8 @@ class Candidate(models.Model):
     hr_advantage = models.TextField(max_length=1024, blank=True, verbose_name=u'优势')
     hr_disadvantage = models.TextField(max_length=1024, blank=True, verbose_name=u'顾虑和不足')
     hr_result = models.CharField(max_length=256, choices=INTERVIEW_RESULT_TYPE, blank=True, verbose_name=u'HR复试结果')
-    # hr_interviewer_user = models.ForeignKey(User, related_name='hr_interviewer_user', blank=True, null=True, on_delete=models.CASCADE, verbose_name=u'HR面试官')
-    hr_interviewer = models.CharField(max_length=256,blank=True,verbose_name=u'HR面试官')
+    hr_interviewer_user = models.ForeignKey(User, related_name='hr_interviewer_user', blank=True, null=True, on_delete=models.CASCADE, verbose_name=u'HR面试官')
+    # hr_interviewer = models.CharField(max_length=256,blank=True,verbose_name=u'HR面试官')
     hr_remark = models.CharField(max_length=256, blank=True, verbose_name=u'HR复试备注')
 
     creator = models.CharField(max_length=256, blank=True, verbose_name=u'候选人数据的创建人')
@@ -101,8 +108,8 @@ class Candidate(models.Model):
         verbose_name_plural = u'应聘者'
 
         permissions = [
-            ("export", "Can export candidate list"),
-            ("notify", "notify interviewer for candidate review"),
+            ("export", "Can export candidate list"),# 导出权限：可以导出候选人名单
+            ("notify", "notify interviewer for candidate review"),# 通知权限：通知面试官进行候选人审查
         ]
 
     # Python 2 优先使用这个方法，把对象转换成字符串； 如果没有__unicode__()方法，使用 __str__()方法

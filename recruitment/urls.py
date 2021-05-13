@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,re_path,register_converter
 from django.conf.urls import include,url
-
+from django.utils.translation import gettext_lazy as _ # 用于下面的 'GlobalYZ后台管理系统'
 from app01 import views
 from app01.urlconvert import MonConvert
 
@@ -25,9 +25,14 @@ register_converter(MonConvert,"mm")
 
 urlpatterns = [
     url(r"^",include("jobs.urls")),# url和re_path用法是完全一致的
+    path('grappelli/',include('grappelli.urls')),
     path('admin/', admin.site.urls),
-    path('timer/',views.timer),# 当用户请求是127.0.0.1:8000/timer的时候，首先匹配到这个app01视图函数 如同views.timer(request)
+    #registration这个APP提供了accounts目录下的不同应用，比如accounts的login、register、logout
+    path('accounts/', include('registration.backends.simple.urls')),
 
+
+
+    path('timer/',views.timer),# 当用户请求是127.0.0.1:8000/timer的时候，首先匹配到这个app01视图函数 如同views.timer(request)
     path('mysqlindex/',views.mysqlIndex),
     path('add/',views.add),# 数据库添加
     path('query/',views.query),# 数据库查询
@@ -43,3 +48,5 @@ urlpatterns = [
     path("articles/<mm:month>",views.path_month),
 ]
 
+
+admin.site.site_header = _('GlobalYZ后台管理系统')

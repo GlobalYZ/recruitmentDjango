@@ -16,17 +16,35 @@
 ②可追溯：可追溯创建时间，修改时间，可以逻辑删除
 ③一致性原则：数据之间保持一致，尽可能避免同样的数据存储在不同表中
 
-创建工程
+1---创建工程
 django-admin startproject recruitment
 python3 startproject recruitment
-创建应用
+2---创建应用
 python3 manage.py startapp jobs
-创建账号
+3---创建账号
 python3 manage.py createsuperuser
-数据迁移
+4---数据迁移
 python3 manage.py makemigrations
 python3 manage.py migrate
-启动
-python3 manage.py runserver 0.0.0.0:8000
-查看数据库存放位置
+5---启动  后者方法是指定settings下面的local.py的配置启动
+python3 manage.py runserver 0.0.0.0:8000 settings=settings.local
+6---查看数据库存放位置
 mysql>show global variables like "%datadir%";
+7---读取CSV文件:前提是在类中已定义好
+python3 manage.py import_candidates --path ~/Desktop/候选人列表.csv
+8---安装 Django 的主题风格，注意要加到INSTALLED_APPS，和urlpatterns引入
+pip3 install django-grappelli
+INSTALLED_APPS = [
+    'grappelli',]
+urlpatterns = [
+    path('grappelli/',include('grappelli.urls')),]
+9---安装钉钉聊天机器人：
+pip3 install DingtalkChatbot
+测试群消息:
+python3 manage.py shell --settings=settings.local
+from interview import dingtalk
+dingtalk.send("秋季招聘面试启动通知，自2020/09/01开始秋季招聘")
+10---安装registration，允许候选人注册登录
+pip3 install django-registration-redux
+添加到apps中，同步数据库，添加登录，退出链接到页面中
+

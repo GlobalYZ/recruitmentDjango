@@ -31,13 +31,17 @@ DEBUG = True
 
 # ALLOWED_HOSTS 里面配置有哪些IP地址可以访问，默认是只有127.0.0.1的端口可以访问，可以再这里输入服务器外网的IP到外边访问
 # 通常不会在这里配，而是用一个网关服务，比如是用Nginx用Tengine来做这个网关，把Django的应用开放出去
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost","127.0.0.1","*",]
 
+LOGIN_REDIRECT_URL = '/' # 登录成功了之后的，默认跳转的url，这个默认跳转的是首页
+SIMPLE_BACKEND_REDIRECT_URL = '/accounts/login/'# 在后端注册成功了之后登录的url
 
 # Application definition
 # INSTALLED_APPS它是Django项目里默认安装的应用
 # 默认有安装django.admin、auth、sessions、messages和静态资源文件的应用，我们创建完了应用之后，也要往APPS的配置里面的结尾加上我们应用
 INSTALLED_APPS = [
+    'grappelli',
+    'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -136,7 +140,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False # False是使用系统当前时间
 
 
 # Static files (CSS, JavaScript, Images)
@@ -155,10 +159,13 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# 下面语句的作用是，在处理表的时候，打印出对数据库的处理过程
+'''下面语句的作用是，在处理表的时候，打印出对数据库的处理过程和日志记录
+# 一共四个组件handlers日志的处理器，记录到哪里；loggers定义了哪一些日志的记录器，、filters过滤器，定义一系列的处理链；
+# formatters记录日志配置的格式，记录了什么内容
+'''
 # LOGGING= {
 #     'version': 1,
-#     'disalbe_existing_loggers':False,
+#     'disalbe_existing_loggers':False, # 是否禁用现在已有的其他的logger
 #     'handlers':{
 #         'console':{
 #             'level':'DEBUG',
@@ -166,10 +173,49 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         },
 #     },
 #     'loggers':{
-#         'django.db.backends':{
+#         'django.db.backends':{ # django_python3_ldap
 #             'handlers':['console'],
 #             'propagate':True,
 #             'level':'DEBUG',
 #         },
 #     }
 # }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {# 当前时间(年月日时分秒)、是哪个类、是多少行、日志级别、消息
+            'format': '%(asctime)s %(name)-12s %(lineno)d %(levelname)-8s %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {# 往控制台输出
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+
+        'mail_admins': {# 发送到邮件处理器
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
+        'file': {# 记录到指定文件
+            #'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'simple',
+            'filename': os.path.join(os.path.dirname(BASE_DIR), 'recruitment.admin.log'),
+        },
+    },
+
+    'root': {# root是一个系统全局级别默认的日志记录器，是logger里特殊的，这里定义了往控制台和文件同时输出
+        'handlers': ['console','file'],
+        'level': 'INFO',# INFO跟以上级别.包括ERROR、WARNING、CRITICAL都会记下来
+    },
+
+    'loggers': {
+        "django_python3_ldap": {# 这个生效要先安装ldap
+            "handlers": ["console", "file"],
+            "level": "DEBUG",
+        },
+    },
+}
