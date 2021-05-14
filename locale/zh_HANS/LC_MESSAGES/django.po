@@ -1,0 +1,161 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-14 16:39+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: jobs/models.py:25
+msgid "职位类别"
+msgstr ""
+
+#: jobs/models.py:27
+msgid "职位名称"
+msgstr ""
+
+#: jobs/models.py:29
+msgid "工作地点"
+msgstr ""
+
+#: jobs/models.py:31
+msgid "职位职责"
+msgstr ""
+
+#: jobs/models.py:32
+msgid "职位要求"
+msgstr ""
+
+#: jobs/models.py:37
+msgid "创建人"
+msgstr ""
+
+#: jobs/models.py:39
+msgid "创建日期"
+msgstr ""
+
+#: jobs/models.py:40
+msgid "修改时间"
+msgstr ""
+
+#: jobs/models.py:43
+msgid "职位"
+msgstr ""
+
+#: jobs/models.py:44
+msgid "职位列表"
+msgstr ""
+
+#. Translators: 简历实体的翻译
+#: jobs/models.py:52
+msgid "姓名"
+msgstr ""
+
+#: jobs/models.py:53
+msgid "申请人"
+msgstr ""
+
+#: jobs/models.py:54
+msgid "城市"
+msgstr ""
+
+#: jobs/models.py:55
+msgid "手机号码"
+msgstr ""
+
+#: jobs/models.py:56
+msgid "邮箱"
+msgstr ""
+
+#: jobs/models.py:57
+msgid "应聘职位"
+msgstr ""
+
+#: jobs/models.py:58
+msgid "生源地"
+msgstr ""
+
+#: jobs/models.py:59
+msgid "性别"
+msgstr ""
+
+#: jobs/models.py:60
+msgid "个人照片"
+msgstr ""
+
+#: jobs/models.py:61
+msgid "简历附件"
+msgstr ""
+
+#: jobs/models.py:64
+msgid "本科学校"
+msgstr ""
+
+#: jobs/models.py:65
+msgid "研究生学校"
+msgstr ""
+
+#: jobs/models.py:67
+msgid "专业"
+msgstr ""
+
+#: jobs/models.py:68
+msgid "学历"
+msgstr ""
+
+#: jobs/models.py:78
+msgid "简历"
+msgstr ""
+
+#: jobs/models.py:79
+msgid "简历列表"
+msgstr ""
+
+#: jobs/templates/base.html:15
+msgid "匠果科技开放职位"
+msgstr ""
+
+#: jobs/templates/base.html:21
+msgid "Homepage"
+msgstr "首页"
+
+#: jobs/templates/base.html:22
+msgid "job list"
+msgstr "职位列表"
+
+#: jobs/templates/base.html:25
+msgid "Logout"
+msgstr "退出"
+
+#: jobs/templates/base.html:27
+msgid "Login"
+msgstr "登录"
+
+#: jobs/templates/base.html:31
+#, python-format
+msgid " 终于等到你 %(user_name)s, 期待加入我们，用技术去探索一个新世界 "
+msgstr ""
+
+#: jobs/templates/base.html:33
+msgid "欢迎你，期待加入我们，登陆后可以提交简历."
+msgstr ""
+
+#: jobs/templates/base.html:51
+msgid "Switch"
+msgstr "切换"
+
+#: recruitment/urls.py:52
+msgid "GlobalYZ后台管理系统"
+msgstr ""

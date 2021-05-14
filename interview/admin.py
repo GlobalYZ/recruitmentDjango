@@ -5,8 +5,11 @@ from django.http import HttpResponse
 from django.db.models import Q
 from interview.models import Candidate
 from interview import candidate_field as cf
+from jobs.models import Resume
+from django.utils.safestring import mark_safe
 from datetime import datetime
-from interview import dingtalk
+from django.contrib import messages
+from .dingtalk import send
 import logging
 import csv
 # Register your models here.
@@ -25,7 +28,7 @@ def notify_interviewer(modeladmin, request, queryset):
         candidates = obj.username + ";" + candidates
         interviewers = obj.first_interviewer_user.username + ";" + interviewers
     # 这里的消息发送到钉钉， 或者通过 Celery 异步发送到钉钉
-    #send ("候选人 %s 进入面试环节，亲爱的面试官，请准备好面试： %s" % (candidates, interviewers) )
+    # send ("候选人 %s 进入面试环节，亲爱的面试官，请准备好面试： %s" % (candidates, interviewers) )
     # send_dingtalk_message.delay("候选人 %s 进入面试环节，亲爱的面试官，请准备好面试： %s" % (candidates, interviewers) )
     # messages.add_message(request, messages.INFO, '已经成功发送面试通知')
 
@@ -75,7 +78,7 @@ class CandidateAdmin(admin.ModelAdmin):
         return request.user.has_perm('%s.%s' % (opts.app_label, "export"))
 
     list_display = (
-        "username","city","bachelor_school","first_score","first_result","first_interviewer_user",
+        "username","city","bachelor_school","get_resume","first_score","first_result","first_interviewer_user",
         "second_result","second_interviewer_user","hr_score","hr_result","last_editor"
     )
 
@@ -85,6 +88,17 @@ class CandidateAdmin(admin.ModelAdmin):
     search_fields = ('username','phone','email','bachelor_school')
     # 默认排序
     ordering = ('hr_result','second_result','first_result',)
+
+    def get_resume(self, obj):
+        if not obj.phone:
+            return ""
+        resumes = Resume.objects.filter(phone=obj.phone)
+        if resumes and len(resumes) > 0:
+            return mark_safe(u'<a href="/resume/%s" target="_blank">%s</a' % (resumes[0].id, "查看简历"))
+        return ""
+
+    get_resume.short_description = '查看简历'
+    get_resume.allow_tags = True
 
     '''让只有HR才能在外简洁的修改面试官的方法，但是要和get_changelist_instance组合使用，它覆盖了父类的list_editable属性
     让这个属性的值，从get_list_editable的方法来获取'''

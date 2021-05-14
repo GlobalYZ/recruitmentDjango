@@ -29,7 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #registration这个APP提供了accounts目录下的不同应用，比如accounts的login、register、logout
     path('accounts/', include('registration.backends.simple.urls')),
-
+    path('i18n/', include('django.conf.urls.i18n')),
 
 
     path('timer/',views.timer),# 当用户请求是127.0.0.1:8000/timer的时候，首先匹配到这个app01视图函数 如同views.timer(request)

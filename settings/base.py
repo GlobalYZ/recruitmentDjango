@@ -33,14 +33,14 @@ DEBUG = True
 # 通常不会在这里配，而是用一个网关服务，比如是用Nginx用Tengine来做这个网关，把Django的应用开放出去
 ALLOWED_HOSTS = ["localhost","127.0.0.1","*",]
 
-LOGIN_REDIRECT_URL = '/' # 登录成功了之后的，默认跳转的url，这个默认跳转的是首页
-SIMPLE_BACKEND_REDIRECT_URL = '/accounts/login/'# 在后端注册成功了之后登录的url
+LOGIN_REDIRECT_URL = '/' # 投简历的用户登录成功了之后的，默认跳转的url，这个默认跳转的是首页
+SIMPLE_BACKEND_REDIRECT_URL = '/accounts/login/'# 投简历的用户在后端注册成功了之后登录的url
 
-# Application definition
 # INSTALLED_APPS它是Django项目里默认安装的应用
 # 默认有安装django.admin、auth、sessions、messages和静态资源文件的应用，我们创建完了应用之后，也要往APPS的配置里面的结尾加上我们应用
 INSTALLED_APPS = [
     'grappelli',
+    'bootstrap4',
     'registration',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -54,12 +54,14 @@ INSTALLED_APPS = [
 ]
 # MIDDLEWARE是启动的中间件，包括安全的中间件，防跨站攻击的中间件，跟认证授权的中间件
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'interview.performance.performance_logger_middleware',# 自定义的中间件
+    'django.middleware.security.SecurityMiddleware',# 常用的安全拦截处理
+    'django.contrib.sessions.middleware.SessionMiddleware',# 处理用户的登录信息
+    'django.middleware.locale.LocaleMiddleware',# 多语言中间件
+    'django.middleware.common.CommonMiddleware',#
+    'django.middleware.csrf.CsrfViewMiddleware',# 处理跨站攻击
+    'django.contrib.auth.middleware.AuthenticationMiddleware',# 处理用户认证登录
+    'django.contrib.messages.middleware.MessageMiddleware',# 处理用户操作的提示消息
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'app01.middleware.MyMiddleware',# 自定义的中间件
 ]
@@ -128,16 +130,24 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+from django.utils.translation import gettext_lazy as _
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 # 这里用来配置默认的语言，默认是英文的'en-us'，可以把它改成中文的'zh-hans'.
+LANGUAGES = [
+    ('zh-hans', _('Chinese')),
+    ('en', _('English')),
+]
+
 LANGUAGE_CODE = 'zh-Hans'
 
-TIME_ZONE = 'UTC' # 可以设置时区 'Asia/Shanghai'
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
+TIME_ZONE = 'Asia/Shanghai' # 可以设置时区 'Asia/Shanghai' 'UTC'
 
 USE_I18N = True
-
 USE_L10N = True
 
 USE_TZ = False # False是使用系统当前时间
@@ -205,6 +215,13 @@ LOGGING = {
             'formatter': 'simple',
             'filename': os.path.join(os.path.dirname(BASE_DIR), 'recruitment.admin.log'),
         },
+
+        'performance': {
+            # 'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'simple',
+            'filename': os.path.join(os.path.dirname(BASE_DIR), 'recruitment.performance.log'),
+        },
     },
 
     'root': {# root是一个系统全局级别默认的日志记录器，是logger里特殊的，这里定义了往控制台和文件同时输出
@@ -217,5 +234,13 @@ LOGGING = {
             "handlers": ["console", "file"],
             "level": "DEBUG",
         },
+
+        "interview.performance": {
+            "handlers": ["console", "performance"],
+            "level": "INFO",
+            "propagate": False,
+        },
     },
 }
+
+DINGTALK_WEB_HOOK = ""

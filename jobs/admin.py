@@ -1,6 +1,8 @@
 from django.contrib import admin
-from jobs.models import Job
+from jobs.models import Job,Resume
 from datetime import datetime
+from django.contrib import messages
+from interview.models import Candidate
 # Register your models here.Django自带admin相关
 # admin这里定义管理的属性，比如要把创建人默认的显示出来而不是选择
 class JobAdmin(admin.ModelAdmin):# 继承自admin的ModelAdmin，它是一个管理类
@@ -15,5 +17,42 @@ class JobAdmin(admin.ModelAdmin):# 继承自admin的ModelAdmin，它是一个管
         obj.creator = request.user  # 这样可以把当前登录的用户设置成这个Model的创建人
         super().save_model(request,obj,form,change) # 需要调用一下父类的方法保存对象
 
+
+def enter_interview_process(modeladmin, request, queryset):
+    candidate_names = ""
+    for resume in queryset:
+        candidate = Candidate()
+        # 把 obj 对象中的所有属性拷贝到 candidate 对象中:
+        candidate.__dict__.update(resume.__dict__)
+        candidate.created_date = datetime.now()
+        candidate.modified_date = datetime.now()
+        candidate_names = candidate.username + "," + candidate_names
+        candidate.creator = request.user.username
+        candidate.save()
+    messages.add_message(request, messages.INFO, '候选人: %s 已成功进入面试流程' % (candidate_names) )
+
+
+enter_interview_process.short_description = u"进入面试流程"
+
+class ResumeAdmin(admin.ModelAdmin):
+    actions = (enter_interview_process,)
+    list_display = ('username', 'applicant', 'city', 'apply_position', 'bachelor_school', 'master_school', 'major','created_date')
+
+    readonly_fields = ('applicant', 'created_date', 'modified_date',)
+
+    fieldsets = (
+        (None, {'fields': (
+            "applicant", ("username", "city", "phone"),
+            ("email", "apply_position", "born_address", "gender", ),
+            ("bachelor_school", "master_school"), ("major", "degree"), ('created_date', 'modified_date'),
+            "candidate_introduction", "work_experience","project_experience",)}),
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.applicant = request.user
+        super().save_model(request, obj, form, change)
+
+
 # 将Job类注册到管理后台，页面上能显示
 admin.site.register(Job,JobAdmin)
+admin.site.register(Resume, ResumeAdmin)

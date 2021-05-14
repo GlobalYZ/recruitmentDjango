@@ -1,0 +1,28 @@
+{#<h1>提交简历</h1>#}
+{##}
+{#<form method="post">#}
+{#    {% csrf_token %}#}
+{#    {{ form.as_p }}<!-- 把上下文传过来的form直接调用他的as_p方法，把它转换成这个要展示的html -->#}
+{#    <input type="submit" value="提交">#}
+{#</form>#}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<form method="post" method="post" class="form" enctype="multipart/form-data" style="width:600px;margin-left:5px">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">
+      Submit
+    </button>
+    {% endbuttons %}
+</form>

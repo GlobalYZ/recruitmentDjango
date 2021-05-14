@@ -46,5 +46,31 @@ from interview import dingtalk
 dingtalk.send("秋季招聘面试启动通知，自2020/09/01开始秋季招聘")
 10---安装registration，允许候选人注册登录
 pip3 install django-registration-redux
-添加到apps中，同步数据库，添加登录，退出链接到页面中
+添加到apps中，同步数据库，base.py中要添加登录，退出链接到页面中
+在url加映射：
+path('accounts/', include('registration.backends.simple.urls')),
+11---使用Bootstrap来定制页面样式
+pip3 install django-bootstrap4
+添加到apps中，html模板里使用bootstrap标签
+12---安装多语言包，model里的verbose_name和html里都可以翻译
+先在插件里装好kite
+项目目录下要先有个locale目录
+mkdir local
+django-admin makemessages -l zh_HANS -l en
+这个时候可以看到了，里面自己也能改改中英文对照的地方
+然后编译成2进制文件
+django-admin compilemessages
+然后在url里加映射
+path('i18n/', include('django.conf.urls.i18n'))
+base.py里面加：要导好包提前from django.utils.translation import gettext_lazy as _
+LANGUAGES = [
+    ('zh-hans', _('Chinese')),
+    ('en', _('English')),
+]
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+等等，对照着加吧
+然后中间件加在sessions后面-common前面：'django.middleware.locale.LocaleMiddleware',
+
 
