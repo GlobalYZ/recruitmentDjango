@@ -72,8 +72,7 @@ ROOT_URLCONF = 'recruitment.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']# html文件夹的位置和名称
-        ,
+        'DIRS': [BASE_DIR / 'templates'],# html文件夹的位置和名称
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -163,6 +162,8 @@ STATICFILES_DIRS = [
     # BASE_DIR是路径，在上边有定义= Path(__file__).resolve().parent.parent，上一层的上一层的下面和static文件夹拼出来一个路径
     os.path.join(BASE_DIR,"static")# 配置一个静态文件夹，告诉Django去哪里拿
 ]
+MEDIA_URL = '/media/' # 上传静态文件用到
+MEDIA_ROOT = os.path.join(BASE_DIR,'medias')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

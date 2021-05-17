@@ -1,31 +1,66 @@
-# HttpResponse()是响应对象，（响应首行，消息头，响应体），Django已经帮做好首行和消息头，这里只需加入字符串的响应体
 import datetime
 
-from django.shortcuts import render,HttpResponse
+from django.http import JsonResponse, FileResponse, HttpResponseRedirect
 
-
-# Create your views here.
-# 视图函数这里必须要传request，它是通过urls文件里的path传过来的
+from app01.models import *
+from django.shortcuts import render, HttpResponse, redirect
 from django.urls import reverse
 from django.views import View
+from django.views.generic import TemplateView
+import time
+# HttpResponse()是响应对象，（响应首行，消息头，响应体），Django已经帮做好首行和消息头，这里只需加入字符串的响应体
 
-def timer(request):
-    import time
+'''类视图 一继承视图django.views.generic.TemplateView，二，配置模板地址，三，配置URL。TemplateView是继承了三个类。
+使用class改写视图实际上是面向对象改造的过程，Django内置的通用视图使代码更精简'''
+class HomeView(TemplateView):
+    template_name = 'home.html'# 可直接返回模板，无需render
+
+def search(request):
+    '''
+    请求对象就一个request实例，响应对象可以有多种类型
+    HttpResponseBase
+        |--HttpResponse (文本)
+            |--JsonResponse
+            |--HttpResponseRedirect (重定向)
+        |--StreamingHttpResponse (二进制流)
+            |--FileResponse
+    '''
+    name = request.GET.get('name','')# 可以理解成类似于字典，查询name的值，如果没有，给它一个空值
+    print(name)# 浏览器输入http://127.0.0.1:8000/app01/search/?name=1，取得值 1
+
     print(request.method)# GET POST
     print(request.GET,request.POST)# QueryDict的字典对象，可以根据request.GET.get("name")取值
-    print(request.path)# url:协议：//IP：port/路径？请求数据，，，打印的是端口号之后，？之前的路径
+    print(request.path)# /app01/search/    url:协议：//IP：port/路径？请求数据，，，打印的是端口号之后，？之前的路径
     print(request.get_full_path)# 区别于上边，全打印出来
-    print(request.build_absolute_uri())# 绝对路径,括号里可以输入字符串，它能自动拼接上
+    print(request.build_absolute_uri())# 绝对路径,括号里可以输入字符串，它能自动拼接上 http://127.0.0.1:8000/app01/search/?name=1
     print(request.scheme)# 请求是http还是https
     print(request.content_type)# text/plain意思是文本，有各种类型的回复
-    print(request.FILES)
-    print(request.META)# 里面有很多的数据，以字典的形式存储
+    print(request.COOKIES)# cookie信息 {'csrftoken': 'WRCI54tFKHdDzZHdhYAwaTkxPz4AXpFNvAx8S8Ts2YUSGR8wv7QPgOJNrhO8o6Lu', 'sessionid': '907obfjomggho274kip23u79bmxt1ggg'}
+    print(request.FILES)# 文件信息
+    print(request.META)# 请求头信息，里面有很多的数据，以JSON字典的形式存储。比如： REMOTE_ADDR-请求的IP地址，HTTP——USER_AGENT-请求用户的终端信息
+    print(request.headers)# 精简了META
 
+    resp = HttpResponse('响应内容',status=201)
+    resp.status_code = 204# 再改也可以
+    user_info = {
+        'name': '张三',
+        'age': 34
+    }
 
-    ctime = time.time()
-    # render()方法给封装好了，填入timer。html会自动去templates文件夹下去找
-    # 把数据嵌入到html中，只需在第三个参数上传递即可，相当于把变量传递了，html那边的名字是和data保持一致的
-    return render(request,"timer.html",{"date":ctime})# render方法会会渲染模板文件（html）成一个html文件，templates里都是模板文件
+    # return resp
+    # return JsonResponse(user_info)
+    resf = FileResponse(open('medias/huluwa.jpeg','rb'))
+    return resf
+
+def no_data_404(request):
+    return HttpResponse('404访问的页面不存在')
+
+def article_detail(request, article_id):
+    '''文章详情，ID是从1000开始的整数，如果没有，重定向到404，article_id: 文章ID'''
+    if article_id < 1000:
+        # return HttpResponseRedirect('/app01/not/found/')# 这种方法不太推荐
+        return redirect('/app01/not/found/')# 注意，传入的no_data_404是视图函数的名称(我没成功)
+    return HttpResponse('文章{}的内容: '.format(article_id))
 
 def special_case_2003(request):
     # 反向解析，给一个别名，通过reverse可解析出地址，在任意函数中都可以调用,加上命名空间更精准
@@ -46,15 +81,12 @@ def year_archive(request,year):
 def month_archive(request,y,m):
     return HttpResponse(y + "  " + m)
 
-def article_detail(requet,year,month,detail):
-    return HttpResponse(year + " - " + month + " - " + detail)
-
 def path_year(request,year):
     print(type(year))# 输出类型是<class 'int'>，得益于主urls里的有名分组，否则将是字符串类型
     return HttpResponse("path_year```")
 def path_month(request,month):
-    print(type(month))
-    return HttpResponse("path_month```")
+    print(type(month))# <class 'int'>
+    return HttpResponse("path_month```: {}".format(month))
 
 def index(request):
     '''
@@ -63,10 +95,6 @@ def index(request):
        1. 涉及到深度查询,用句点符
        2. 涉及到数据转换，用过滤器      {{val|filter_name:参数}}
     ② 标签    {%  %}
-
-
-    :param request:
-    :return:
     '''
     name = 'hahaha'
     i = 10
@@ -80,21 +108,16 @@ def index(request):
     alex = Person("alex",22)
     egon = Person('egon',33)
     personList = [alex,egon]
-
     # ---------------------过滤器------------------------
-    import datetime
     now = datetime.datetime.now()
     person_List = []
     file_size = 1231423423
     text = "hello python hi luffycity go java linux"
-
     user = "洋哥"
     # user = None
-
+    date = time.time()
+    # return render(request,"timer.html",{"date":ctime})
     return render(request,"timer.html",locals())# 由于变量名多，一一写入麻烦，可以用locals()方法将其一起传入，但名字要对应一致
-
-# 需要先导入
-from app01.models import Book
 
 def mysqlIndex(request):
     # ==================================添加表记录========================================
@@ -214,8 +237,6 @@ def mysqlIndex(request):
 
     return HttpResponse("OK")
 
-# 需要先导入
-from app01.models import *
 def  add(request):
     # pub = Publish.objects.create(name="人民出版社",email="123@139.com",city="北京")
     # ----------------------------绑定一对多的关系---------------------------------------------------

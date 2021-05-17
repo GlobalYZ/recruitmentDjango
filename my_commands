@@ -16,11 +16,19 @@
 ②可追溯：可追溯创建时间，修改时间，可以逻辑删除
 ③一致性原则：数据之间保持一致，尽可能避免同样的数据存储在不同表中
 
-1---创建工程
-django-admin startproject recruitment
-python3 startproject recruitment
+Django的安装方式：
+1、命令行（推荐）：
+pip install django或者加上镜像源pip install -i https://pypi.tuna.tsinghua.edu.cn/simple/
+2.检测安装成功：
+>>>import django
+>>>django.__version__
+1---创建工程(如果用Pycharm创建，可以选择虚拟环境New environment或者已存在的环境Existing interpreter）
+如果用pycharm，那么win路径是django3.x/Scripts/python.exe，MAC是/opt/homebrew/bin/python3
+django-admin startproject 项目名称
+python3 startproject 项目名称
 2---创建应用
-python3 manage.py startapp jobs
+（manage.py是对Django项目命令行管理用的工具，会把Django-admin里的命令都可以拿过来使用，继承自它，只是设置了Django项目的一些环境变量）
+python3 manage.py startapp 应用名称
 3---创建账号
 python3 manage.py createsuperuser
 4---数据迁移
