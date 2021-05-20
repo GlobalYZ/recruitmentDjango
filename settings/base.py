@@ -51,10 +51,12 @@ INSTALLED_APPS = [
     'app01',
     'jobs',
     'interview',
+    'debug_toolbar',
 ]
 # MIDDLEWARE是启动的中间件，包括安全的中间件，防跨站攻击的中间件，跟认证授权的中间件
 MIDDLEWARE = [
-    'interview.performance.performance_logger_middleware',# 自定义的中间件
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'interview.performance.performance_logger_middleware',# 自定义的中间件
     'django.middleware.security.SecurityMiddleware',# 常用的安全拦截处理
     'django.contrib.sessions.middleware.SessionMiddleware',# 处理用户的登录信息
     'django.middleware.locale.LocaleMiddleware',# 多语言中间件
@@ -71,9 +73,9 @@ ROOT_URLCONF = 'recruitment.urls'
 # 这里指的是是默认使用了哪个模板引擎，模板引擎里也配置了有哪些上下文处理器，
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],# html文件夹的位置和名称
-        'APP_DIRS': True,
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',# django.template.backends.jinja2.Jinja2，它用jinjia2文件夹
+        'DIRS': [os.path.join(BASE_DIR,'templates')],# html文件夹的位置和名称，用这种方式关联可以解决跨平台的路径问题
+        'APP_DIRS': True,# 决定模板引擎是否应该进入每个已安装的应用中查找模板
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -82,6 +84,10 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+    },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [os.path.join(BASE_DIR,'jinja2')],
     },
 ]
 
@@ -245,3 +251,6 @@ LOGGING = {
 }
 
 DINGTALK_WEB_HOOK = ""
+INTERNAL_IPS = [
+    '127.0.0.1'
+]

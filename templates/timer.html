@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
         <style>
-            h4{
-                color : red;
-            }
+            h4{color : red;}
         </style>
         <script src="/static/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
 <h4>当前时间：{{ date }}</h4>
 <form action="" method="post"  enctype="multipart/form-data"><!--enctype是告诉后台，这个表单里有文件，这样view可用request.FIELS取得文件到内存里-->
     {% csrf_token %}<!--  加上这句，就不会出现没有数据提交后的网页错误了，不加的话需要将配置文件中的中间件注释掉  -->
@@ -22,82 +18,67 @@
     <input type="submit">
 </form>
 
-
-<p>{{ name }}</p>
-<p>{{ i }}</p>
-<p>{{ info }}</p>
-<p>{{ l }}</p>
-<p>{{ alex }}</p>
-<p>{{ personList }}</p>
-<p>{{ b }}</p>
-
-深度查询
-
-<p>l.1 {{ l.1 }}</p>
-<p>info.name  {{ info.name }}</p>
-<p>alex.name和age  {{ alex.name }}   {{ alex.age }}</p>
-<p>personList里的人的年龄   {{ personList.1.age }}</p>
-
-<h3>过滤器</h3>
-<p>{{ now }}</p>
-过滤后，此date是固定参数不是自定义的
-<p>{{ now|date:"Y-m-d" }}</p>
-<p>person_List</p>
-过滤后，用default
-<p>{{ person_List|default:"数据为空" }}</p>
-
-<p>{{ file_size }}</p>
-<p>{{ file_size|filesizeformat }}</p>
-<p>{{ text|truncatechars:9 }}</p>
-<p>{{ text|truncatewords:3 }}</p>
-
-<h4>for标签</h4>
-{% for ii in l %}
-    <p>{{ ii }}</p>
+<p>图片</p>
+<img src="{{ img_url }}" alt="">
+{% load static %}
+<img src="{% static '二哈.jpeg' %}" alt="ErDog">
+<p>info：{{ info }}</p>
+<p>list: {{ list }}</p>
+<p>bool：{{ bool }}</p>
+<p>alex：{{ alex }}</p>
+<p>personList：{{ personList }}</p>
+<h3>用户列表</h3>
+{% for user in personList %}
+    <p>第{{ forloop.counter }}个用户名：{{ user.name }}</p>
+    <p>年龄：{{ user.age }}</p>
+{#    {% for key,value in user.items %} 如果personList是列表不是一个类的话，可以这么用#}
+{#        {{ key }}: {{ value }}#}
+{#        {% endfor %}#}
+{% empty %}
+    <p>暂无用户信息</p>
 {% endfor %}
-
-{% for ii in info %}
-    <p>{{ ii }}</p><!-- 这里的ii输出的是info字典里的key，没有value-->
-{% endfor %}
-
-{% for person in personList %}
-    <p>{{ forloop.counter }}   {{ person.name }}   {{ person.age }}</p>
-    {% empty %}{# empty和forloob都是在循环内可使用的#}
-    <p>列表为空</p>
-{% endfor %}
-
+<h3>类中成员方法的调用</h3>
+<p>{{ child.child }}</p>类中测成员方法调用不需要()，也不支持参数传递
+<h3>if else 写法</h3>
 {% if user %}
-    <p>
-        <a href="">hi {{ user }}</a>
-        <a href="">注销</a>
-    </p>
+    <p><a href="">hi {{ user }}</a><a href="">跳转到其他页</a></p>
 {% else %}
-    <p>
-        <a href="">登录</a>
-        <a href="">注册</a>
-    </p>
-{% endif %} 
+    <p><a href="">登录</a><a href="">注册</a></p>
+{% endif %}
 
 {% with personList.1.name as p %}
     {{ p }}
     {{ p }}
 {% endwith %}
 
+<h3>深度查询</h3>
+<p>list.1 {{ list.1 }}</p>
+<p>info.name  {{ info.name }}</p>
+<p>alex.name和age  {{ alex.name }}   {{ alex.age }}</p>
+<p>personList里的人的年龄   {{ personList.1.age }}</p>
+
+<h3>过滤器</h3>
+{#过滤器语法：{{ value|filter_name:params }}#}
+<p>now直接输出: {{ now }}</p>
+<p>now的过滤器：{{ now|date:"Y-m-d" }}</p>
+<p>person_List为空的：{{ person_List|default:"数据为空" }}</p>
+
+<p>{{ file_size }}</p>
+<p>{{ file_size|filesizeformat }}</p>
+<p>{{ text|truncatechars:9 }}</p>
+<p>{{ text|truncatewords:3 }}</p>
+
+
+
 <h4>自定义过滤器</h4>
 {% load my_tag_filter %}<!--使用前需要调用一下-->
 <p>{{ i|multi_filter:20 }}</p>
-
 {% multi_tag 7 9 10%}
-
-
-
-
 
 <script>
     $("h4").click(function (){
         $(this).css("color","green")
     })
 </script>
-
 </body>
 </html>

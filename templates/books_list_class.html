@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>分页-面向对象</title>
+</head>
+<body>
+  <h3>分页-面向对象</h3>
+  <p>统计：总共 {{ page_obj.paginator.num_pages }}页， 当前第{{ page_obj.number }}页</p>
+{% for book in object_list %}
+  <p>{{ book.pk }}:{{ book.title }}</p>
+{% endfor %}
+
+
+</body>
+</html>
