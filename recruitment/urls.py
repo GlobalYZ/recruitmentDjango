@@ -36,6 +36,10 @@ urlpatterns = [
 
     # 分发
     re_path(r"^app01/",include(("app01.urls","app01"))),# 后面的app01就是命名空间的名称,组合成元组的形式，与视图函数里的反向解析相对应
+    # 系统模块
+    path('system/', include('system.urls')),
+    # 景点相关的URL
+    path('sight/', include('sight.urls'))
 ]
 
 # 出现错误的配置

@@ -82,3 +82,5 @@ LOCALE_PATHS = (
 然后中间件加在sessions后面-common前面：'django.middleware.locale.LocaleMiddleware',
 
 
+
+

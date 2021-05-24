@@ -52,6 +52,10 @@ INSTALLED_APPS = [
     'jobs',
     'interview',
     'debug_toolbar',
+    # 系统模块
+    'system.apps.SystemConfig',
+    # 景点模块
+    'sight.apps.SightConfig',
 ]
 # MIDDLEWARE是启动的中间件，包括安全的中间件，防跨站攻击的中间件，跟认证授权的中间件
 MIDDLEWARE = [
