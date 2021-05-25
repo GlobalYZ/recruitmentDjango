@@ -27,19 +27,27 @@ register_converter(MonConvert,"mm")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r"^",include("jobs.urls")),# url和re_path用法是完全一致的
-    path('grappelli/',include('grappelli.urls')),
+    # url(r"^", include("jobs.urls")),# url和re_path用法是完全一致的
+    # path('grappelli/',include('grappelli.urls')),
     #registration这个APP提供了accounts目录下的不同应用，比如accounts的login、register、logout
-    path('accounts/', include('registration.backends.simple.urls')),
-    path('i18n/', include('django.conf.urls.i18n')),
-    path('testmiddle/',views.testMiddleware),# 测试中间件
+    # path('accounts/', include('registration.backends.simple.urls')),
+    # path('i18n/', include('django.conf.urls.i18n')),
+    # path('testmiddle/',views.testMiddleware),# 测试中间件
 
     # 分发
-    re_path(r"^app01/",include(("app01.urls","app01"))),# 后面的app01就是命名空间的名称,组合成元组的形式，与视图函数里的反向解析相对应
+    # re_path(r"^app01/",include(("app01.urls","app01"))),# 后面的app01就是命名空间的名称,组合成元组的形式，与视图函数里的反向解析相对应
     # 系统模块
     path('system/', include('system.urls')),
+    # 用户账户模块
+    path('accounts/', include('accounts.urls')),
     # 景点相关的URL
-    path('sight/', include('sight.urls'))
+    path('sight/', include('sight.urls')),
+    # 订单模块
+    path('order/', include('order.urls')),
+    # 富文本相关的配置
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    # 统计报表
+    path('master/', include('master.urls')),
 ]
 
 # 出现错误的配置

@@ -1,15 +1,11 @@
-import csv
-
 from django.contrib import admin
 from django.http import HttpResponse
 from django.db.models import Q
-from interview.models import Candidate
-from interview import candidate_field as cf
-from jobs.models import Resume
+from pythonBasis.interview.models import Candidate
+from pythonBasis.interview import candidate_field as cf
+from pythonBasis.jobs.models import Resume
 from django.utils.safestring import mark_safe
 from datetime import datetime
-from django.contrib import messages
-from .dingtalk import send
 import logging
 import csv
 # Register your models here.

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime
-from interview.models import  DEGREE_TYPE
+from pythonBasis.interview.models import  DEGREE_TYPE
 from django.utils.translation import gettext_lazy as _
 
 # Create your models here.

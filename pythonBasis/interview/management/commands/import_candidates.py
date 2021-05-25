@@ -1,7 +1,7 @@
 import csv
 
 from django.core.management import BaseCommand
-from interview.models import Candidate
+from pythonBasis.interview.models import Candidate
 
 
 class Command(BaseCommand):

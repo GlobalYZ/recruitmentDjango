@@ -1,8 +1,8 @@
 from django.contrib import admin
-from jobs.models import Job,Resume
+from pythonBasis.jobs.models import Job,Resume
 from datetime import datetime
 from django.contrib import messages
-from interview.models import Candidate
+from pythonBasis.interview.models import Candidate
 # Register your models here.Django自带admin相关
 # admin这里定义管理的属性，比如要把创建人默认的显示出来而不是选择
 class JobAdmin(admin.ModelAdmin):# 继承自admin的ModelAdmin，它是一个管理类

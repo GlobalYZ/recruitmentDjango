@@ -1,9 +1,8 @@
 # Create your views here.
 from django.shortcuts import render
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.template import loader
-from jobs.models import Job,Resume
-from jobs.models import Cities,JobTypes
+from django.http import Http404, HttpResponseRedirect
+from pythonBasis.jobs.models import Job,Resume
+from pythonBasis.jobs.models import Cities,JobTypes
 from django.views.generic.edit import CreateView # 这是Django里面通用的编辑的视图
 from django.views.generic.detail import DetailView
 # 这里把我们自定义的页面能够加进来，Django的视图可以用函数定义，也可以用视图的类去定义，这里用函数作为我们的视图，需注册到URL路径里去

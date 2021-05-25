@@ -49,8 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app01',
-    'jobs',
-    'interview',
     'debug_toolbar',
     # 富文本编辑器
     'ckeditor',
@@ -74,7 +72,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',# 处理用户的登录信息
     'django.middleware.locale.LocaleMiddleware',# 多语言中间件
     'django.middleware.common.CommonMiddleware',#
-    'django.middleware.csrf.CsrfViewMiddleware',# 处理跨站攻击
+    # 'django.middleware.csrf.CsrfViewMiddleware',# 处理跨站攻击
     'django.contrib.auth.middleware.AuthenticationMiddleware',# 处理用户认证登录
     'django.contrib.messages.middleware.MessageMiddleware',# 处理用户操作的提示消息
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -129,10 +127,6 @@ DATABASES = {
 }
 
 
-
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -181,11 +175,10 @@ STATICFILES_DIRS = [
     # BASE_DIR是路径，在上边有定义= Path(__file__).resolve().parent.parent，上一层的上一层的下面和static文件夹拼出来一个路径
     os.path.join(BASE_DIR,"static")# 配置一个静态文件夹，告诉Django去哪里拿
 ]
+
 MEDIA_URL = '/media/' # 上传静态文件用到
 MEDIA_ROOT = os.path.join(BASE_DIR,'medias')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -211,62 +204,79 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     }
 # }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'simple': {# 当前时间(年月日时分秒)、是哪个类、是多少行、日志级别、消息
-            'format': '%(asctime)s %(name)-12s %(lineno)d %(levelname)-8s %(message)s',
-        },
-    },
-    'handlers': {
-        'console': {# 往控制台输出
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-        },
-
-        'mail_admins': {# 发送到邮件处理器
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-        },
-        'file': {# 记录到指定文件
-            #'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'simple',
-            'filename': os.path.join(os.path.dirname(BASE_DIR), 'recruitment.admin.log'),
-        },
-
-        'performance': {
-            # 'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'simple',
-            'filename': os.path.join(os.path.dirname(BASE_DIR), 'recruitment.performance.log'),
-        },
-    },
-
-    'root': {# root是一个系统全局级别默认的日志记录器，是logger里特殊的，这里定义了往控制台和文件同时输出
-        'handlers': ['console','file'],
-        'level': 'INFO',# INFO跟以上级别.包括ERROR、WARNING、CRITICAL都会记下来
-    },
-
-    'loggers': {
-        "django_python3_ldap": {# 这个生效要先安装ldap
-            "handlers": ["console", "file"],
-            "level": "DEBUG",
-        },
-
-        "interview.performance": {
-            "handlers": ["console", "performance"],
-            "level": "INFO",
-            "propagate": False,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'simple': {# 当前时间(年月日时分秒)、是哪个类、是多少行、日志级别、消息
+#             'format': '%(asctime)s %(name)-12s %(lineno)d %(levelname)-8s %(message)s',
+#         },
+#     },
+#     'handlers': {
+#         'console': {# 往控制台输出
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'simple',
+#         },
+#
+#         'mail_admins': {# 发送到邮件处理器
+#             'level': 'ERROR',
+#             'class': 'django.utils.log.AdminEmailHandler',
+#         },
+#         'file': {# 记录到指定文件
+#             #'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'formatter': 'simple',
+#             'filename': os.path.join(os.path.dirname(BASE_DIR), 'recruitment.admin.log'),
+#         },
+#
+#         'performance': {
+#             # 'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'formatter': 'simple',
+#             'filename': os.path.join(os.path.dirname(BASE_DIR), 'recruitment.performance.log'),
+#         },
+#     },
+#
+#     'root': {# root是一个系统全局级别默认的日志记录器，是logger里特殊的，这里定义了往控制台和文件同时输出
+#         'handlers': ['console','file'],
+#         'level': 'INFO',# INFO跟以上级别.包括ERROR、WARNING、CRITICAL都会记下来
+#     },
+#
+#     'loggers': {
+#         "django_python3_ldap": {# 这个生效要先安装ldap
+#             "handlers": ["console", "file"],
+#             "level": "DEBUG",
+#         },
+#
+#         "interview.performance": {
+#             "handlers": ["console", "performance"],
+#             "level": "INFO",
+#             "propagate": False,
+#         },
+#     },
+# }
 
 DINGTALK_WEB_HOOK = ""
 INTERNAL_IPS = [
     '127.0.0.1'
 ]
+
+
+# 富文本编辑器文件上传的位置
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+MEDIA_URL = 'http://localhost:8080/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'medias')
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 # 指定自定义的用户模型
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = '/accounts/user/login/'
