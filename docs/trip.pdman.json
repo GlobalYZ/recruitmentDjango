@@ -5,6 +5,120 @@
       "chnname": "系统模块",
       "entities": [
         {
+          "title": "system_image_related",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "id",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "is_valid",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否有效"
+            },
+            {
+              "name": "img",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "图片地址",
+              "notNull": true
+            },
+            {
+              "name": "summary",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "图片说明"
+            },
+            {
+              "name": "user_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "关联用户",
+              "notNull": false
+            },
+            {
+              "name": "content_type_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "关联模型",
+              "notNull": true
+            },
+            {
+              "name": "object_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "模型的ID",
+              "notNull": true
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "图片关联"
+        },
+        {
           "title": "system_slider",
           "fields": [
             {
@@ -315,37 +429,47 @@
           "chnname": "景点"
         },
         {
-          "title": "sight_images",
+          "title": "sight_info",
           "fields": [
             {
-              "name": "REVISION",
+              "name": "id",
               "type": "Integer",
               "remark": "",
-              "chnname": "乐观锁"
+              "chnname": "id",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
             },
             {
-              "name": "CREATED_BY",
-              "type": "IdOrKey",
+              "name": "sight_id",
+              "type": "Integer",
               "remark": "",
-              "chnname": "创建人"
+              "chnname": "关联景点",
+              "notNull": true
             },
             {
-              "name": "CREATED_TIME",
-              "type": "DateTime",
+              "name": "entry_explain",
+              "type": "LongText",
               "remark": "",
-              "chnname": "创建时间"
+              "chnname": "入园参考"
             },
             {
-              "name": "UPDATED_BY",
-              "type": "IdOrKey",
+              "name": "play_way",
+              "type": "LongText",
               "remark": "",
-              "chnname": "更新人"
+              "chnname": "特色玩法"
             },
             {
-              "name": "UPDATED_TIME",
-              "type": "DateTime",
+              "name": "traffic",
+              "type": "LongText",
               "remark": "",
-              "chnname": "更新时间"
+              "chnname": "交通到达"
+            },
+            {
+              "name": "tips",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "温馨提示"
             }
           ],
           "indexs": [],
@@ -395,77 +519,585 @@
               "relationNoShow": true
             }
           ],
-          "chnname": "景点图片"
+          "chnname": "景点详细信息"
         },
         {
-          "title": "景点详细信息",
+          "title": "sight_comment",
           "fields": [
             {
-              "name": "REVISION",
+              "name": "id",
               "type": "Integer",
               "remark": "",
-              "chnname": "乐观锁"
+              "chnname": "ID",
+              "notNull": true,
+              "autoIncrement": true,
+              "pk": true
             },
             {
-              "name": "CREATED_BY",
-              "type": "IdOrKey",
+              "name": "user_id",
+              "type": "Integer",
               "remark": "",
-              "chnname": "创建人"
+              "chnname": "关联用户",
+              "notNull": true
             },
             {
-              "name": "CREATED_TIME",
+              "name": "created_at",
               "type": "DateTime",
               "remark": "",
               "chnname": "创建时间"
             },
             {
-              "name": "UPDATED_BY",
-              "type": "IdOrKey",
-              "remark": "",
-              "chnname": "更新人"
-            },
-            {
-              "name": "UPDATED_TIME",
+              "name": "updated_at",
               "type": "DateTime",
               "remark": "",
               "chnname": "更新时间"
-            }
-          ]
-        },
-        {
-          "title": "景点评论",
-          "fields": [
+            },
             {
-              "name": "REVISION",
+              "name": "is_valid",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否有效"
+            },
+            {
+              "name": "sight_id",
               "type": "Integer",
               "remark": "",
-              "chnname": "乐观锁"
+              "chnname": "关联景点",
+              "notNull": true
             },
             {
-              "name": "CREATED_BY",
-              "type": "IdOrKey",
+              "name": "content",
+              "type": "LongString",
               "remark": "",
-              "chnname": "创建人"
+              "chnname": "内容"
             },
             {
-              "name": "CREATED_TIME",
+              "name": "is_top",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否置顶",
+              "notNull": true
+            },
+            {
+              "name": "love_count",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "点赞的次数"
+            },
+            {
+              "name": "score",
+              "type": "Double",
+              "remark": "",
+              "chnname": "评分",
+              "notNull": true
+            },
+            {
+              "name": "ip_address",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "ip"
+            },
+            {
+              "name": "is_public",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否公开"
+            },
+            {
+              "name": "reply_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "回复"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "景点评论"
+        },
+        {
+          "title": "sight_ticket",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": true
+            },
+            {
+              "name": "sight_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "关联景点",
+              "notNull": true
+            },
+            {
+              "name": "created_at",
               "type": "DateTime",
               "remark": "",
               "chnname": "创建时间"
             },
             {
-              "name": "UPDATED_BY",
+              "name": "name",
               "type": "IdOrKey",
               "remark": "",
-              "chnname": "更新人"
+              "chnname": "名称",
+              "notNull": true
             },
             {
-              "name": "UPDATED_TIME",
+              "name": "is_valid",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否有效"
+            },
+            {
+              "name": "desc",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "描述"
+            },
+            {
+              "name": "types",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "类型"
+            },
+            {
+              "name": "price",
+              "type": "Double",
+              "remark": "",
+              "chnname": "原价"
+            },
+            {
+              "name": "discount",
+              "type": "Double",
+              "remark": "",
+              "chnname": "折扣"
+            },
+            {
+              "name": "total_stock",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "总库存"
+            },
+            {
+              "name": "remain_stock",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "剩余的库存"
+            },
+            {
+              "name": "expire_date",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "有效期"
+            },
+            {
+              "name": "return_policy",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "退改政策"
+            },
+            {
+              "name": "has_invoice",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否提供发票"
+            },
+            {
+              "name": "enty_way",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "入园方式"
+            },
+            {
+              "name": "tips",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "预订须知"
+            },
+            {
+              "name": "ramark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "其它说明"
+            },
+            {
+              "name": "status",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "状态"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "门票"
+        }
+      ],
+      "graphCanvas": {
+        "nodes": [
+          {
+            "shape": "table",
+            "title": "sight",
+            "moduleName": false,
+            "x": 377.39581298828125,
+            "y": 203.3333282470703,
+            "id": "b6d425e2"
+          },
+          {
+            "shape": "table",
+            "title": "sight_info",
+            "moduleName": false,
+            "x": 750.3958129882812,
+            "y": 77.33332824707031,
+            "id": "eb2e18a2"
+          },
+          {
+            "shape": "table",
+            "title": "sight_ticket",
+            "moduleName": false,
+            "x": 190,
+            "y": 640,
+            "id": "331a40de"
+          },
+          {
+            "shape": "table",
+            "title": "system_image_related",
+            "moduleName": "system",
+            "x": 1066.327153242345,
+            "y": 450.974595773522,
+            "id": "a6ec7db3"
+          },
+          {
+            "shape": "table",
+            "title": "accounts_user",
+            "moduleName": "accounts",
+            "x": 1160.3611458524483,
+            "y": 804.0258711659129,
+            "id": "50ce4696"
+          },
+          {
+            "shape": "table",
+            "title": "sight_comment",
+            "moduleName": false,
+            "x": 640,
+            "y": 670,
+            "id": "320450d9"
+          }
+        ],
+        "edges": [
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "eb2e18a2",
+            "target": "b6d425e2",
+            "id": "9d85bf5d",
+            "controlPoints": [
+              {
+                "x": 618.6106567382812,
+                "y": 39.58332824707031
+              },
+              {
+                "x": 507.84503173828125,
+                "y": 55.43467959842167
+              }
+            ],
+            "sourceAnchor": 0,
+            "targetAnchor": 1
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "a6ec7db3",
+            "target": "b6d425e2",
+            "id": "a932f690",
+            "controlPoints": [
+              {
+                "x": 927.671879804845,
+                "y": 543.9150719639981
+              },
+              {
+                "x": 507.84503173828125,
+                "y": 55.43467959842167
+              }
+            ],
+            "sourceAnchor": 16,
+            "targetAnchor": 1
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "a6ec7db3",
+            "target": "320450d9",
+            "id": "da68abe1",
+            "controlPoints": [
+              {
+                "x": 927.671879804845,
+                "y": 543.9150719639981
+              },
+              {
+                "x": 768.791015625,
+                "y": 562.1293103448276
+              }
+            ],
+            "sourceAnchor": 16,
+            "targetAnchor": 1
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "331a40de",
+            "target": "b6d425e2",
+            "id": "864e71d1",
+            "controlPoints": [
+              {
+                "x": 49.5576171875,
+                "y": 512.189024390244
+              },
+              {
+                "x": 246.94659423828125,
+                "y": 55.43467959842167
+              }
+            ],
+            "sourceAnchor": 4,
+            "targetAnchor": 0
+          }
+        ]
+      },
+      "associations": [
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "sight_info",
+            "field": "id"
+          },
+          "to": {
+            "entity": "sight",
+            "field": "id"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "sight_ticket",
+            "field": "sight_id"
+          },
+          "to": {
+            "entity": "sight",
+            "field": "id"
+          }
+        }
+      ]
+    },
+    {
+      "name": "accounts",
+      "chnname": "用户账户",
+      "entities": [
+        {
+          "title": "accounts_user",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "username",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "用户名",
+              "notNull": true
+            },
+            {
+              "name": "password",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "密码",
+              "notNull": true
+            },
+            {
+              "name": "nickname",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "用户昵称",
+              "notNull": true
+            },
+            {
+              "name": "avatar",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "用户头像"
+            },
+            {
+              "name": "updated_at",
               "type": "DateTime",
               "remark": "",
               "chnname": "更新时间"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "is_valid",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否有效"
             }
-          ]
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "用户基本信息"
         }
       ],
       "graphCanvas": {
@@ -473,14 +1105,6 @@
         "nodes": []
       },
       "associations": []
-    },
-    {
-      "name": "accounts",
-      "chnname": "用户账户",
-      "entities": [],
-      "graphCanvas": {
-        "edges": []
-      }
     },
     {
       "name": "order",
