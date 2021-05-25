@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
@@ -14,7 +15,8 @@ class Sight(CommonModel):
     desc = models.CharField('描述', max_length=256)
     main_img = models.ImageField('主图', upload_to='%Y%m/sight/', max_length=256)
     banner_img = models.ImageField('详情主图', upload_to='%Y%m/sight/', max_length=256)
-    content = models.TextField('详细')
+    # content = models.TextField('详细')
+    content = RichTextField('详细')
     score = models.FloatField('评分', default=5)
     min_price = models.FloatField('最低价格', default=0)
     province = models.CharField('省份', max_length=32)
@@ -32,6 +34,11 @@ class Sight(CommonModel):
     class Meta:
         db_table = 'sight'
         ordering = ['-updated_at']
+        verbose_name = '景点基础信息'
+        verbose_name_plural = '景点基础信息'
+
+    def __str__(self):
+        return self.name
 
     @property
     def comment_count(self):
@@ -46,14 +53,16 @@ class Sight(CommonModel):
 
 class Info(models.Model):
     """ 景点详情 """
-    sight = models.OneToOneField(Sight, on_delete=models.CASCADE)
-    entry_explain = models.CharField('入园参考', max_length=1024, null=True, blank=True)
-    play_way = models.TextField('特色玩法',null=True, blank=True)
-    tips = models.TextField('温馨提示', null=True, blank=True)
-    traffic = models.TextField('交通到达', null=True, blank=True)
+    sight = models.OneToOneField(Sight, on_delete=models.CASCADE, verbose_name='关联景点')
+    entry_explain = RichTextField('入园参考', max_length=1024, null=True, blank=True)
+    play_way = RichTextField('特色玩法',null=True, blank=True)
+    tips = RichTextField('温馨提示', null=True, blank=True)
+    traffic = RichTextField('交通到达', null=True, blank=True)
 
     class Meta:
         db_table = 'sight_info'
+        verbose_name = '景点详情'
+        verbose_name_plural = '景点详情'
 
 
 class Ticket(CommonModel):
@@ -76,14 +85,16 @@ class Ticket(CommonModel):
     entry_way = models.SmallIntegerField('入园方式',
                                          choices=EntryWay.choices,
                                          default=EntryWay.BY_TICKET)
-    tips = models.TextField('预定须知',null=True, blank=True)
-    remark = models.TextField('其他说明', null=True, blank=True)
+    tips = RichTextField('预定须知',null=True, blank=True)
+    remark = RichTextField('其他说明', null=True, blank=True)
     status = models.SmallIntegerField('状态',
                                       choices=TicketStatus.choices,
                                       default=TicketStatus.OPEN)
 
     class Meta:
         db_table = 'sight_ticket'
+        verbose_name = '门票'
+        verbose_name_plural = '门票'
 
     @property
     def sell_price(self):
@@ -119,3 +130,5 @@ class Comment(CommonModel):
     class Meta:
         db_table = 'sight_comment'
         ordering = ['-love_count', '-created_at']
+        verbose_name = '评论及回复'
+        verbose_name_plural = '评论及回复'

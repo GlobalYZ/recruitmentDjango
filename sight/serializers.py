@@ -93,3 +93,25 @@ class SightInfoSerializer(BaseSerializer):
             'tips': obj.tips,
             'traffic': obj.traffic,
         }
+
+
+class TicketDetailSerializer(BaseSerializer):
+    """ 门票详情 """
+
+    def to_dict(self):
+        obj = self.obj
+        return {
+            'pk': obj.pk,
+            'name': obj.name,
+            'desc': obj.desc,
+            'types': obj.types,
+            'price': obj.price,
+            'sell_price': obj.sell_price,
+            'discount': obj.discount,
+            'expire_date': obj.expire_date,
+            'return_policy': obj.return_policy,
+            'has_invoice': obj.has_invoice,
+            'entry_way': obj.get_entry_way_display(),
+            'tips': obj.tips,
+            'remark': obj.remark
+        }

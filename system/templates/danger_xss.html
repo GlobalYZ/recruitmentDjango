@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>危险的跨站点脚本攻击</title>
+</head>
+<body>
+  <h3>内容输入</h3>
+  <form action="." method="post" enctype="multipart/form-data">
+    <div>名称：<input type="text" name="name"></div>
+    <div>描述：<textarea name="desc" cols="40" rows="10"></textarea></div>
+    <div><input type="submit" value="提交"></div>
+  </form>
+  <h3>内容展示</h3>
+{% for item in data_list %}
+  <p>{{ item|safe|escape }}</p>
+  {% endfor %}
+</body>
+</html>

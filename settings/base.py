@@ -52,12 +52,19 @@ INSTALLED_APPS = [
     'jobs',
     'interview',
     'debug_toolbar',
+    # 富文本编辑器
+    'ckeditor',
+    'ckeditor_uploader',
     # 系统模块
     'system.apps.SystemConfig',
     # 景点模块
     'sight.apps.SightConfig',
     # 用户账户
     'accounts.apps.AccountsConfig',
+    # 订单模块
+    'order.apps.OrderConfig',
+    'master.apps.MasterConfig'
+
 ]
 # MIDDLEWARE是启动的中间件，包括安全的中间件，防跨站攻击的中间件，跟认证授权的中间件
 MIDDLEWARE = [
@@ -260,3 +267,6 @@ DINGTALK_WEB_HOOK = ""
 INTERNAL_IPS = [
     '127.0.0.1'
 ]
+# 指定自定义的用户模型
+AUTH_USER_MODEL = 'accounts.User'
+LOGIN_URL = '/accounts/user/login/'

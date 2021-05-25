@@ -1109,10 +1109,548 @@
     {
       "name": "order",
       "chnname": "订单及支付",
-      "entities": [],
+      "entities": [
+        {
+          "title": "order",
+          "fields": [
+            {
+              "name": "sn",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "订单编号",
+              "notNull": true
+            },
+            {
+              "name": "ID",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "user_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "购买的用户",
+              "notNull": true
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "buy_count",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "购买数量",
+              "defaultValue": "1"
+            },
+            {
+              "name": "buy_amount",
+              "type": "Double",
+              "remark": "",
+              "chnname": "总价",
+              "notNull": true
+            },
+            {
+              "name": "to_user",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "收货人",
+              "notNull": true
+            },
+            {
+              "name": "to_area",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "省市区"
+            },
+            {
+              "name": "to_address",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "详细地址"
+            },
+            {
+              "name": "to_phone",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "手机号码",
+              "notNull": true
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注信息"
+            },
+            {
+              "name": "express_type",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "快递"
+            },
+            {
+              "name": "express_no",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "单号"
+            },
+            {
+              "name": "types",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "订单类型",
+              "notNull": true
+            },
+            {
+              "name": "status",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "订单状态",
+              "notNull": true
+            },
+            {
+              "name": "is_valid",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "删除字段",
+              "notNull": true,
+              "defaultValue": "1"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "订单表"
+        },
+        {
+          "title": "order_item",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "user_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "关联用户",
+              "notNull": true
+            },
+            {
+              "name": "order_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "关联订单",
+              "notNull": true
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "is_valid",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否删除",
+              "defaultValue": "1"
+            },
+            {
+              "name": "status",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "状态"
+            },
+            {
+              "name": "flash_name",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "商品的名称",
+              "notNull": true
+            },
+            {
+              "name": "flash_img",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "商品的主图",
+              "notNull": true
+            },
+            {
+              "name": "flash_origin_price",
+              "type": "Double",
+              "remark": "",
+              "chnname": "原价",
+              "notNull": true
+            },
+            {
+              "name": "flash_price",
+              "type": "Double",
+              "remark": "",
+              "chnname": "销售价",
+              "notNull": true
+            },
+            {
+              "name": "flash_discount",
+              "type": "Double",
+              "remark": "",
+              "chnname": "折扣",
+              "notNull": true
+            },
+            {
+              "name": "count",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "购买的数量",
+              "notNull": true
+            },
+            {
+              "name": "amount",
+              "type": "Money",
+              "remark": "",
+              "chnname": "总额",
+              "notNull": true
+            },
+            {
+              "name": "remark",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "备注信息"
+            },
+            {
+              "name": "object_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "复合关联字段",
+              "notNull": true
+            },
+            {
+              "name": "content_type_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "复合关联字段",
+              "notNull": true
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "订单明细表"
+        },
+        {
+          "title": "order_payment",
+          "fields": [
+            {
+              "name": "id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "user_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "关联用户"
+            },
+            {
+              "name": "order_id",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "关联订单"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "status",
+              "type": "Money",
+              "remark": "",
+              "chnname": "支付状态"
+            },
+            {
+              "name": "sn",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "流水号"
+            },
+            {
+              "name": "amount",
+              "type": "Money",
+              "remark": "",
+              "chnname": "金额"
+            },
+            {
+              "name": "third_sn",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "第三方单号"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "支付凭证"
+        }
+      ],
       "graphCanvas": {
-        "edges": []
-      }
+        "nodes": [
+          {
+            "shape": "table",
+            "title": "order",
+            "moduleName": false,
+            "x": 246.03125,
+            "y": 138.3333282470703,
+            "id": "b5e0a68f"
+          },
+          {
+            "shape": "table",
+            "title": "order_item",
+            "moduleName": false,
+            "x": 840,
+            "y": 170,
+            "id": "2c6f519f"
+          },
+          {
+            "shape": "table",
+            "title": "order_payment",
+            "moduleName": false,
+            "x": 590,
+            "y": 490,
+            "id": "de6e59be"
+          }
+        ],
+        "edges": [
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "2c6f519f",
+            "target": "b5e0a68f",
+            "id": "a23df98b",
+            "controlPoints": [
+              {
+                "x": 686.212890625,
+                "y": 62.20945945945945
+              },
+              {
+                "x": 380.4794921875,
+                "y": 10.488733652475716
+              }
+            ],
+            "sourceAnchor": 4,
+            "targetAnchor": 3
+          },
+          {
+            "shape": "erdRelation",
+            "relation": "0,n:1",
+            "source": "de6e59be",
+            "target": "b5e0a68f",
+            "id": "68b21d7f",
+            "controlPoints": [
+              {
+                "x": 461.208984375,
+                "y": 462.3690476190476
+              },
+              {
+                "x": 380.4794921875,
+                "y": 10.488733652475716
+              }
+            ],
+            "sourceAnchor": 4,
+            "targetAnchor": 3
+          }
+        ]
+      },
+      "associations": [
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "order_item",
+            "field": "order_id"
+          },
+          "to": {
+            "entity": "order",
+            "field": "ID"
+          }
+        },
+        {
+          "relation": "0,n:1",
+          "from": {
+            "entity": "order_payment",
+            "field": "order_id"
+          },
+          "to": {
+            "entity": "order",
+            "field": "ID"
+          }
+        }
+      ]
     }
   ],
   "dataTypeDomains": {

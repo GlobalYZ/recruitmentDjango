@@ -1,0 +1,114 @@
+/* 后台首页 */
+.page-home .widget {
+    padding: 10px 20px 25px;
+}
+
+.page-home .widget .widget-head {
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: none;
+}
+
+.page-home .widget .widget-body {
+    padding: 0;
+}
+
+.page-home .widget-outline {
+    display: flex;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.page-home .widget-outline .outline-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background-color: #2aabd2;
+}
+
+.page-home .widget-outline .outline-left i {
+    font-size: 40px;
+    color:#fff;
+}
+
+.page-home .widget-outline .outline-right {
+    flex-basis: 50%;
+}
+
+.page-home .widget-echarts {
+    height: 400px;
+    width: 100%;
+}
+
+.page-home .widget-card {
+    min-height: 174px;
+    color: #ffffff;
+    padding: 12px 17px 12px 22px;
+    margin-bottom: 20px;
+}
+
+.page-home .widget-card.card__blue {
+    background: linear-gradient(-125deg, #57bdbf, #2f9de2);
+}
+
+.page-home .widget-card.card__red {
+    background: linear-gradient(-125deg, #ff7d7d, #fb2c95);
+}
+
+.page-home .widget-card.card__violet {
+    background: linear-gradient(-113deg, #c543d8, #925cc3);
+}
+
+.page-home .widget-card.card__primary {
+    background: linear-gradient(-141deg, #ecca1b, #f39526);
+}
+
+.page-home .widget-card .card-header {
+    position: relative;
+    display: block;
+    padding-top: 18px;
+    color: #fff;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.page-home .widget-card .card-icon {
+    position: absolute;
+    right: 30px;
+    top: 24px;
+    font-size: 70px;
+    color: rgba(255, 255, 255, 0.12);
+}
+
+.page-home .widget-card .card-description {
+    position: relative;
+    display: block;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    padding-top: 8px;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.page-home .widget-card .card-value {
+    position: relative;
+    font-weight: 300;
+    display: block;
+    color: #fff;
+    font-size: 46px;
+    line-height: 46px;
+    margin-bottom: 8px;
+}
+.page-home .layout-right{
+    background-color: #f5f5f5;
+}
+.page-home .panel-info {
+    margin-top: 10px;
+    padding: 20px 0;
+    background-color: #fff;
+}
