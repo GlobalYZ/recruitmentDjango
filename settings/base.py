@@ -279,5 +279,5 @@ CACHES = {
 }
 # 指定自定义的用户模型，用来替换Django的默认模型，在accounts里也写了一个User类
 AUTH_USER_MODEL = 'accounts.User'
-
+# 对应accounts.views里的user_info方法，用以测试跳转使用
 LOGIN_URL = '/accounts/user/login/'

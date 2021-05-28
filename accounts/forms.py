@@ -11,6 +11,7 @@ from utils import constants
 error_messages 覆盖字段引发异常后的错误显示
 widget 定制界面显示方式（如：文本框、选择框）
 disabled 禁用表单，界面上不可操作
+redis相关操作：set、get、mset、mget、append、del、incr/decr(增加/减少1)
 '''
 class LoginForm(forms.Form):
     """ 登录表单 只需要用户名和密码"""
@@ -54,7 +55,7 @@ class LoginForm(forms.Form):
         """ 执行用户登录 """
         user = self.user
         # 调用登录
-        login(request, user)
+        login(request, user)# Django默认的方式是存储到session里了
         # 修改最后登录的时间，last_login是"用户模型"AbstractUser里继承的AbstractBaseUser的字段属性
         user.last_login = now()
         user.save()
@@ -113,7 +114,7 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError('验证码输入不正确')
         return data
 
-    @transaction.atomic# 通过事务的方式来进行数据库的控制
+    @transaction.atomic# 通过自动的事务控制来进行新创建
     def do_register(self, request):
         """ 执行注册 """
         data = self.cleaned_data
@@ -144,6 +145,70 @@ class RegisterForm(forms.Form):
         except Exception as e:
             print(e)
             return None
+
+class ModifyForm(forms.Form):
+    """ 用户修改信息 """
+    username = forms.CharField(label='手机号码', max_length=16, required=True, error_messages={'required': '请输入手机号码'})
+    nickname = forms.CharField(label='昵称', max_length=16, required=False, error_messages={'required': '昵称不可用'})
+    real_name = forms.CharField(label='真实姓名', max_length=32, required=False, error_messages={'required': '姓名不可用'})
+    avatar = forms.CharField(label='头像', max_length=32, required=False, error_messages={'required': '头像不可用'})
+    email = forms.CharField(label='电子邮箱', max_length=128, required=False, error_messages={'required': 'Email不正确'})
+    sex = forms.IntegerField(label='性别', required=False, error_messages={'required': '性别有误'})
+    age = forms.IntegerField(label='年龄', required=False, error_messages={'required': '年龄有误'})
+
+    def clean_nickname(self):
+        """ 昵称验证 """
+        nickname = self.cleaned_data['nickname']
+        if User.objects.filter(nickname=nickname).exists():
+            raise forms.ValidationError('昵称已经被使用')
+        return nickname
+    def clean_age(self):
+        """ 验证用户的年龄 """
+        age = self.cleaned_data['age']
+        username = self.cleaned_data['username']
+        if age is None:
+            return User.objects.get(username=username).profile.age
+        if int(age) >= 120 or int(age) <= 1:
+            raise forms.ValidationError('年龄只能在1-120之间')
+        return age
+    def clean_sex(self):
+        """ 验证用户的年龄 """
+        sex = self.cleaned_data['sex']
+        username = self.cleaned_data['username']
+        if sex is None:
+            return User.objects.get(username=username).profile.sex
+        return sex
+    def clean(self):
+        data = super().clean()
+        if self.errors:
+            return
+        return data
+    @transaction.atomic
+    def modify(self, request):
+        """ 修改信息 """
+        data = self.cleaned_data
+        print('data         ',data)
+        version=request.headers.get('version', '')
+        source=request.headers.get('source', '')
+        ip = request.META.get('REMOTE_ADDR', '')
+        try:
+            user = User.objects.get(username=data.get('username'))
+            profile = user.profile
+            user.nickname = data.get('nickname', user.nickname)
+            user.avatar = data.get('avatar', user.avatar)
+            user.email = data.get('email', user.email)
+            profile.real_name = data.get('real_name', profile.real_name)
+            profile.age = data.get('age', profile.age)
+            profile.sex = data.get('sex', profile.sex)
+            user.save()
+            profile.save()
+            user.add_login_record(username=user.username, ip=ip, source=source, version=version)
+            return user, profile
+        except Exception as e:
+            print(e)
+            return None
+
+
 
 
 class ProfileEditForm(forms.ModelForm):

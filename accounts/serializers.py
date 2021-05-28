@@ -8,7 +8,8 @@ class UserSerializer(BaseSerializer):
         return {
             'username': user.username,
             'nickname': user.nickname,
-            'avatar': user.avatar_url# 头像地址
+            'avatar': user.avatar_url,# 头像地址
+            'email': user.email,
         }
 
 
@@ -20,4 +21,5 @@ class UserProfileSerializer(BaseSerializer):
             'real_name': profile.real_name,
             'sex': profile.sex,# 返回0或1
             'sex_display': profile.get_sex_display(),# 这个方法会返回对应的sex的中文信息，方便理解
+            'age': profile.age,
         }

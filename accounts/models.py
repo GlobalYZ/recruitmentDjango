@@ -70,7 +70,6 @@ class LoginRecord(models.Model):
     address = models.CharField('地址', max_length=32, null=True, blank=True)
     source = models.CharField('登录的来源', max_length=16, null=True)
     version = models.CharField('登录的版本', max_length=16, null=True)
-
     created_at = models.DateTimeField('登录时间', auto_now_add=True)
 
     class Meta:
