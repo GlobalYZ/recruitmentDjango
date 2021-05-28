@@ -1,45 +1,43 @@
 import re
-
 from django import forms
 from django.contrib.auth import authenticate, login
 from django.core.cache import cache
 from django.utils.timezone import now
 from django.db import transaction
-
 from accounts.models import User, Profile
 from utils import constants
 
-
+'''
+error_messages 覆盖字段引发异常后的错误显示
+widget 定制界面显示方式（如：文本框、选择框）
+disabled 禁用表单，界面上不可操作
+'''
 class LoginForm(forms.Form):
-    """ 登录表单 """
-    username = forms.CharField(label='用户名',
-                               max_length=100,
-                               required=False,
-                               help_text='使用帮助',
-                               initial='admin')
-    password = forms.CharField(label='密码', max_length=200, min_length=6,
-                               widget=forms.PasswordInput)
+    """ 登录表单 只需要用户名和密码"""
+    username = forms.CharField(label='用户名', max_length=100, required=False, help_text='使用帮助', initial='admin')
+    password = forms.CharField(label='密码', max_length=200, min_length=6, widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # 当前登录的用户
         self.user = None
 
-    def clean_username(self):
-        """ 验证用户名 hook 钩子函数 """
+    def clean_username(self):# 执行顺序① clean_定义好的字段 这是一个固定格式，
+        """ 验证用户名 hook 钩子函数，Django表单会逐个调用clean_字段 开头的验证 """
+        # cleaned_data--是已经触发了默认的字段属性验证之后，表单的实例数据字典里面是一个一个提交过来的数据
         username = self.cleaned_data['username']
         pattern = r'^1[0-9]{10}$'
         if not re.search(pattern, username):
-            raise forms.ValidationError('手机号%s输入不正确',
-                                        code='invalid_phone',
-                                        params=(username, ))
+            raise forms.ValidationError('手机号%s输入不正确', code='invalid_phone', params=(username, ))
         return username
 
-    def clean(self):
-        data = super().clean()
-        print(data)
+    def clean(self):# 执行顺序② 属于重写
+        """ 对用户名和密码进行统一验证 """
+        data = super().clean()# 此clean()就是反回了self.cleaned_data的数据,它同时也会触发表单验证（上边的钩子函数）
+        print("data:   ",data)# 里面是username和password的字典，如果用户名有问题则字典里只显示password的值
         # 如果单个字段有错误，直接返回，不执行后面的验证
         if self.errors:
+            # print(self.errors.as_json()) 可以打印错误信息，转成json更直观
             return
         username = data.get('username', None)
         password = data.get('password', None)
@@ -49,7 +47,7 @@ class LoginForm(forms.Form):
         else:
             if not user.is_active:
                 raise forms.ValidationError('该用户已经被禁用')
-        self.user = user
+        self.user = user# 如果通过了上边的if和else，那么继续
         return data
 
     def do_login(self, request):
@@ -57,7 +55,7 @@ class LoginForm(forms.Form):
         user = self.user
         # 调用登录
         login(request, user)
-        # 修改最后登录的时间
+        # 修改最后登录的时间，last_login是"用户模型"AbstractUser里继承的AbstractBaseUser的字段属性
         user.last_login = now()
         user.save()
         # TODO 保存登录历史
@@ -115,7 +113,7 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError('验证码输入不正确')
         return data
 
-    @transaction.atomic
+    @transaction.atomic# 通过事务的方式来进行数据库的控制
     def do_register(self, request):
         """ 执行注册 """
         data = self.cleaned_data

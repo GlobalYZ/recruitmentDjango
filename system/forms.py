@@ -18,9 +18,7 @@ class SendSmsCodeForm(forms.Form):
         phone_num = self.cleaned_data['phone_num']
         pattern = r'^1[0-9]{10}$'
         if not re.search(pattern, phone_num):
-            raise forms.ValidationError('手机号%s输入不正确',
-                                        code='invalid_phone',
-                                        params=(phone_num, ))
+            raise forms.ValidationError('手机号%s输入不正确', code='invalid_phone', params=(phone_num, ))
         return phone_num
 
     def send_sms_code(self):

@@ -63,18 +63,16 @@ def send_sms(request):
     # TODO 3. 调用短信的发送接口
     # 4. 告诉用户验证码发送是否成功（会把验证码直接告诉用户）
 
-
+# 用面向对象的方式来实现，比登录接口要简单
 class SmsCodeView(FormView):
     form_class = SendSmsCodeForm
-
-    def form_valid(self, form):
+    def form_valid(self, form):# 重写
         """ 表单已经通过验证 """
         data = form.send_sms_code()
-        if data is not None:
+        if data is not None:# 说明验证码发送成功并且存在Redis里了
             return http.JsonResponse(data, status=201)
         return ServerErrorJsonResponse()
-
-    def form_invalid(self, form):
+    def form_invalid(self, form):# 重写
         """ 表单没有通过验证 """
         err_list = json.loads(form.errors.as_json())
         return BadRequestJsonResponse(err_list)

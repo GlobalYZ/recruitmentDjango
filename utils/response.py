@@ -22,7 +22,7 @@ class BadRequestJsonResponse(JsonResponse):
         data = {
             "error_code": "400000",
             "error_msg": "参数格式不正确",
-            "error_list": err_list
+            "error_list": err_list# 这个list内容就是装进来的那个err
         }
         super().__init__(data, *args, **kwargs)
 

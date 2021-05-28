@@ -134,7 +134,7 @@ class Article(models.Model):
     class Meta:
         verbose_name = "文章"# 单用这一个会有复数+s的形式
         verbose_name_plural = "文章"
-        db_table = 'Article'# 模型映射的数据库表的名称，可在此设置，建议每一张表都加上，不加的话数据库中生成的表名会与类不同
+        # db_table = 'Article'# 模型映射的数据库表的名称，可在此设置，建议每一张表都加上，不加的话数据库中生成的表名会与类不同
         # ordering = ['-pub_date']# 指定数据表的默认排序规则，按时间倒序
         # proxy = True# 如果这是一个代理类就添加此属性，上边需要继承某个类，如User，便可以新加函数等扩展功能
     def get_comment(self):  # 返回评论

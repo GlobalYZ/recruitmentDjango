@@ -41,7 +41,7 @@ SIMPLE_BACKEND_REDIRECT_URL = '/accounts/login/'# 投简历的用户在后端注
 INSTALLED_APPS = [
     'grappelli',
     'bootstrap4',
-    'registration',
+    # 'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -277,6 +277,7 @@ CACHES = {
         }
     }
 }
-# 指定自定义的用户模型
+# 指定自定义的用户模型，用来替换Django的默认模型，在accounts里也写了一个User类
 AUTH_USER_MODEL = 'accounts.User'
+
 LOGIN_URL = '/accounts/user/login/'
