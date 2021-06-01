@@ -33,11 +33,11 @@ def slider_list(request):
     for item in queryset:
         data['objects'].append({
             'id': item.id,
-            'img_url': item.img.url,
+            'img_url': item.img.url,# models模型定义的ImageField属性有url属性
             'target_url': item.target_url,
             'name': item.name
         })
-    # return HttpResponse(data)
+    # return HttpResponse(data) 如果是用这个，返回得到的是一个"metaobjects"字符串
     return http.JsonResponse(data)
 
 

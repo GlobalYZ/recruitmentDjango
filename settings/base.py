@@ -33,8 +33,8 @@ DEBUG = True
 # 通常不会在这里配，而是用一个网关服务，比如是用Nginx用Tengine来做这个网关，把Django的应用开放出去
 ALLOWED_HOSTS = ["localhost","127.0.0.1","*",]
 
-LOGIN_REDIRECT_URL = '/' # 投简历的用户登录成功了之后的，默认跳转的url，这个默认跳转的是首页
-SIMPLE_BACKEND_REDIRECT_URL = '/accounts/login/'# 投简历的用户在后端注册成功了之后登录的url
+# LOGIN_REDIRECT_URL = '/' # 投简历的用户登录成功了之后的，默认跳转的url，这个默认跳转的是首页
+# SIMPLE_BACKEND_REDIRECT_URL = '/accounts/login/'# 投简历的用户在后端注册成功了之后登录的url
 
 # INSTALLED_APPS它是Django项目里默认安装的应用
 # 默认有安装django.admin、auth、sessions、messages和静态资源文件的应用，我们创建完了应用之后，也要往APPS的配置里面的结尾加上我们应用
@@ -54,14 +54,14 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     # 系统模块
-    'system.apps.SystemConfig',
+    'system',
     # 景点模块
-    'sight.apps.SightConfig',
+    'sight',
     # 用户账户
-    'accounts.apps.AccountsConfig',
+    'accounts',
     # 订单模块
-    'order.apps.OrderConfig',
-    'master.apps.MasterConfig'
+    'order',
+    'master.apps.MasterConfig',
 
 ]
 # MIDDLEWARE是启动的中间件，包括安全的中间件，防跨站攻击的中间件，跟认证授权的中间件
@@ -96,10 +96,10 @@ TEMPLATES = [
             ],
         },
     },
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [os.path.join(BASE_DIR,'jinja2')],
-    },
+    # {
+    #     'BACKEND': 'django.template.backends.jinja2.Jinja2',
+    #     'DIRS': [os.path.join(BASE_DIR,'jinja2')],
+    # },
 ]
 
 WSGI_APPLICATION = 'recruitment.wsgi.application'

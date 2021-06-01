@@ -27,7 +27,7 @@ class Sight(CommonModel):
     is_top = models.BooleanField('是否为精选景点', default=False)
     is_hot = models.BooleanField('是否为热门景点', default=False)
 
-    images = GenericRelation(ImageRelated,verbose_name='关联的图片',related_query_name='rel_sight_iamges')
+    images = GenericRelation(ImageRelated,verbose_name='关联的图片',related_query_name='rel_sight_images')
 
     class Meta:
         db_table = 'sight'

@@ -12,7 +12,7 @@ from utils import constants
 from utils.response import NotFoundJsonResponse
 
 
-class SightListView(ListView):
+class SightListView(ListView):# 分页可以直接用ListView它里面的方法实现，注意重写
     """ 景点列表 """
     # 每页放5条数据
     paginate_by = 5
@@ -32,7 +32,7 @@ class SightListView(ListView):
         name = self.request.GET.get('name', None)
         if name:
             query = query & Q(name__icontains=name)
-        queryset = Sight.objects.filter(query)
+        queryset = Sight.objects.filter(query)# 这里得知的object_list是Sight对象
         return queryset
 
     def get_paginate_by(self, queryset):
@@ -40,6 +40,7 @@ class SightListView(ListView):
         page_size = self.request.GET.get('limit', None)
         return page_size or self.paginate_by
 
+    # ListView返回的应是Html模板，但想要的是Json对象，所以需要重写下面方法
     def render_to_response(self, context, **response_kwargs):
         # 从关系型数据库拿数据
         page_obj = context['page_obj']
@@ -50,13 +51,13 @@ class SightListView(ListView):
             return NotFoundJsonResponse()
         # data = {
         #     'meta': {
-        #         'total_count': page_obj.paginator.count,
-        #         'page_count': page_obj.paginator.num_pages,
-        #         'current_page': page_obj.number,
+        #         'total_count': page_obj.paginator.count, 总共有多少记录
+        #         'page_count': page_obj.paginator.num_pages, 总共有多少页
+        #         'current_page': page_obj.number, 当前是多少页
         #     },
         #     'objects': []
         # }
-        # for item in page_obj.object_list:
+        # for item in page_obj.object_list: # object_list是一个ORM对象，没办法转换成一个JSON对象，所以要逐一添加
         #     data['objects'].append({
         #         'id': item.id,
         #         'name': item.name,
@@ -65,7 +66,7 @@ class SightListView(ListView):
         #         'province': item.province,
         #         'min_price': item.min_price,
         #         'city': item.city,
-        #         # TODO 评论数量暂时无法获取
+        #         # TODO 评论数量暂时无法获取，它在一个单独的表
         #         'comment_count': 0
         #     })
         # return http.JsonResponse(data)
