@@ -43,7 +43,7 @@ class SightDetailSerializer(BaseSerializer):
 class CommentListSerializer(BaseListPageSerializer):
     """ 评论列表 """
 
-    def get_object(self, obj):
+    def get_object(self, obj):#
         user = obj.user
         images = []
         for image in obj.images.filter(is_valid=True):
@@ -60,7 +60,7 @@ class CommentListSerializer(BaseListPageSerializer):
             'score': obj.score,
             'is_public': obj.is_public,
             'images': images,
-            'created_at': obj.created_at.strftime('%Y-%m-%d')
+            'created_at': obj.created_at.strftime('%Y-%m-%d')# 需要将它转换成字符串，才能转换成JSON返回
         }
 
 

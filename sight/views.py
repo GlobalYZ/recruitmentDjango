@@ -118,7 +118,9 @@ class SightListCacheView(ListView):
                     return http.JsonResponse(json.loads(data))
             except Exception as e:
                 print(e)
-        # 2. 从关系型数据库拿数据
+        # 2. 从关系型数据库拿数据，context里有要返回的列表数据data
+        """context里有，paginator(里有分页相关信息，count, num_pages, per_page每一页大小等),
+           page_obj(paginator, object_list),is_paginated, object_list, sight_list, view, __len__,"""
         page_obj = context['page_obj']
         if page_obj is not None:
             data = serializers.SightListSerializer(page_obj).to_dict()
@@ -127,15 +129,15 @@ class SightListCacheView(ListView):
             return NotFoundJsonResponse()
 
 
-class SightDetailView(DetailView):
+class SightDetailView(DetailView):# 使用DetailView模板，context里参数稍有不同
     """ 2.2 景点详细信息 """
 
-    def get_queryset(self):
+    def get_queryset(self):# 配置一下数据的来源
         # return Sight.objects.filter(is_valid=True)
         return Sight.objects.all()
 
-    def render_to_response(self, context, **response_kwargs):
-        page_obj = context['object']
+    def render_to_response(self, context, **response_kwargs):# 重写此函数
+        page_obj = context['object']# {'object': <Sight: 景点1>, 'sight': <Sight: 景点1>, 'view': <sight.views.SightDetailView object at 0x10789c5b0>}
         if page_obj is not None:
             if page_obj.is_valid == False:
                 return NotFoundJsonResponse()
@@ -159,7 +161,7 @@ class SightCommentListView(ListView):
 
     def render_to_response(self, context, **response_kwargs):
         """ 重写响应的返回 """
-        page_obj = context['page_obj']
+        page_obj = context['page_obj']# 此时page_obj是个QuerySet
         if page_obj is not None:
             data = serializers.CommentListSerializer(page_obj).to_dict()
             return http.JsonResponse(data)

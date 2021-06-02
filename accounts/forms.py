@@ -215,9 +215,9 @@ class ProfileEditForm(forms.ModelForm):
             raise forms.ValidationError('年龄只能在1-120之间')
         return age
 
-    def save(self, commit=False):
+    def save(self, commit=False):# 重写，默认传递commit=True，意思是要不要直接插入到数据库，一般改为False
         obj = super().save(commit)
-        # 保存数据时做一些其他的业务逻辑处理
+        # 此函数作用：保存数据时做一些其他的业务逻辑处理
         if not obj.source:
             obj.source = 'web'
             obj.save()

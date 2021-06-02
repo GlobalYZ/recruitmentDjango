@@ -35,7 +35,7 @@ class MyUserAdmin(UserAdmin):
     enable_user.short_description = '批量启用用户'
 
 
-@admin.register(Profile)
+@admin.register(Profile)# 这个Profile来自ORM模型，意思是把Profile这个模型配置到后台管理
 class ProfileAdmin(admin.ModelAdmin):
     """ 用户详细信息表 """
     list_display = ('format_username', 'sex', 'age', 'created_at')
@@ -46,7 +46,7 @@ class ProfileAdmin(admin.ModelAdmin):
     # 快捷搜索
     list_filter = ('sex', )
     # 输入内容模糊匹配
-    search_fields = ('username', 'user__nickname')
+    search_fields = ('username', 'user__nickname')# user__nickname是跨表搜索字段
     # 表单中可以编辑的字段
     fields = ('real_name', 'email', 'phone_no', 'sex', 'age')
     # 自定义表单验证
