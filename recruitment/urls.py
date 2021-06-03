@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path,re_path,register_converter
 from django.conf.urls import include,url
 from django.utils.translation import gettext_lazy as _ # 用于下面的 'GlobalYZ后台管理系统'
-from django.views.static import serve
+from django.views.static import serve# 指向静态文件存放地址的规则
 from app01 import views
 from app01.urlconvert import MonConvert
 # 注册自定义的url转换器

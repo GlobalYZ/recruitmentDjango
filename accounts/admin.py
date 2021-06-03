@@ -4,7 +4,7 @@ from accounts.forms import ProfileEditForm
 from accounts.models import Profile, User
 
 
-@admin.register(User)
+@admin.register(User)# 注册自己accounts下的User模型
 class MyUserAdmin(UserAdmin):
     """ 用户基础信息管理 """
     # 列表中显示的内容

@@ -7,7 +7,7 @@ from system.models import Slider
 
 class SliderTest(TestCase):
     """ 轮播图接口 """
-    def setUp(self):
+    def setUp(self):# 重写，正式测试之前一些准备的工作
         Slider.objects.create(name='test1', types=11, img='a.jpg')
         Slider.objects.create(name='test2', types=12, img='b.jpg')
         # 请求对象

@@ -24,8 +24,8 @@ class SightAdmin(admin.ModelAdmin):
         """ 缓存精选景点 """
         queryset = Sight.objects.filter(is_valid=True, is_top=True)
         try:
-            p = Paginator(queryset, 20)
-            page_obj = p.page(1)
+            p = Paginator(queryset, 20)# 填入要分页的结果集，要放入多少条数据，得到一个分页器p
+            page_obj = p.page(1)# 得到第一页的数据
             data = serializers.SightListSerializer(page_obj).to_dict()
             cache.set(constants.INDEX_SIGHT_TOP_KEY, json.dumps(data), constants.INDEX_SIGHT_TIMEOUT)
         except EmptyPage as e:
@@ -46,6 +46,7 @@ class SightAdmin(admin.ModelAdmin):
         except Exception as e:
             print('缓存失败', e)
 
+    # 重写方法，可实现将热门/精选景点添加到redis缓存，form后台表单对象，change表示是不是发生了改变
     def save_form(self, request, form, change):
         """ 新增\修改时缓存数据 """
         obj = super().save_form(request, form, change)

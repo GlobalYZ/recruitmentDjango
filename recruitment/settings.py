@@ -157,16 +157,19 @@ USE_TZ = False # False是使用系统当前时间
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
-# STATIC_URL = '/static/'是默认的别名，下面是新加的，两个需要配合使用
+STATIC_URL = '/static/'# 是默认的别名，下面是新加的，两个需要配合使用
+# STATIC_ROOT = [os.path.join(BASE_DIR,"static")]# 注意执行python3 manage.py collectstatic
+
 # 配好STATICFILES_DIRS形成的效果是找到static时进入的是下面定义的static文件夹下
 STATICFILES_DIRS = [
     # BASE_DIR是路径，在上边有定义= Path(__file__).resolve().parent.parent，上一层的上一层的下面和static文件夹拼出来一个路径
-    os.path.join(BASE_DIR,"static")# 配置一个静态文件夹，告诉Django去哪里拿
+    os.path.join(BASE_DIR, "static")# 配置一个静态文件夹，告诉Django去哪里拿
 ]
+# 富文本编辑器文件上传的位置
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 MEDIA_URL = '/media/' # 上传静态文件用到
-MEDIA_ROOT = os.path.join(BASE_DIR,'medias')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'medias')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

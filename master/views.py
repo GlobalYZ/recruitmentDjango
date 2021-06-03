@@ -9,7 +9,12 @@ from accounts.models import User, Profile
 from order.choices import OrderStatus
 from order.models import Order
 from sight.models import Sight, Comment
-
+'''
+echarts的使用：
+① 引入echarts.js
+② 准备图表呈现的容器
+③ 按照固定的格式填充数据
+'''
 
 def get_data_count(start=None, end=None):
     """
