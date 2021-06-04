@@ -254,12 +254,6 @@ INTERNAL_IPS = [
 ]
 
 
-# 富文本编辑器文件上传的位置
-CKEDITOR_UPLOAD_PATH = "uploads/"
-
-MEDIA_URL = 'http://localhost:8080/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'medias')
-
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
